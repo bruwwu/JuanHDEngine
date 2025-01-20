@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\bruwu\\OneDrive\\Documentos\\GitHub\\JuanHDEngine\\JuanHDEngine\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D29C6982-A589-4081-89B1-91E78D7C41E2}|JuanHDEngine_2010.vcxproj|C:\\Users\\bruwu\\OneDrive\\Documentos\\GitHub\\JuanHDEngine\\JuanHDEngine\\JuanHDEngine.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D29C6982-A589-4081-89B1-91E78D7C41E2}|JuanHDEngine_2010.vcxproj|solutionrelative:JuanHDEngine.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "JuanHDEngine.cpp",
+              "DocumentMoniker": "C:\\Users\\bruwu\\OneDrive\\Documentos\\GitHub\\JuanHDEngine\\JuanHDEngine\\JuanHDEngine.cpp",
+              "RelativeDocumentMoniker": "JuanHDEngine.cpp",
+              "ToolTip": "C:\\Users\\bruwu\\OneDrive\\Documentos\\GitHub\\JuanHDEngine\\JuanHDEngine\\JuanHDEngine.cpp",
+              "RelativeToolTip": "JuanHDEngine.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABQAAAAkAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-01-20T23:46:08.172Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
