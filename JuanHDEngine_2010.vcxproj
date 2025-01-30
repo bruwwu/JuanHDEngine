@@ -418,17 +418,25 @@
   <ItemGroup>
     <ClCompile Include="JuanHDEngine.cpp" />
     <ClCompile Include="Source\BaseApp.cpp" />
+    <ClCompile Include="Source\Device.cpp" />
     <ClCompile Include="Source\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\BaseApp.h" />
+    <ClInclude Include="Include\Device.h" />
     <ClInclude Include="Include\Prerequisites.h" />
     <ClInclude Include="Include\Resource.h" />
+    <ClInclude Include="Include\Swapchain.h" />
     <ClInclude Include="Include\Window.h" />
     <ResourceCompile Include="JuanHDEngine.rc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\JuanHDEngine.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="JuanHDEngine.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
