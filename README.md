@@ -12,5 +12,3 @@ JuanEngineHD es un motor de videojuegos desarrollado en C++ como parte del proye
 
 ## 🎯 Objetivo del Proyecto
 Este motor fue creado con el propósito de entender, analizar y aplicar los principios de arquitectura de motores de videojuegos. Su estructura permite explorar desde el manejo de memoria y sistemas de renderizado, hasta la integración con shaders y físicas.
-
-## 📂 Estructura del Proyecto
