@@ -7,39 +7,46 @@ class DeviceContext;
 class Window;
 class Texture;
 
-class Swapchain {
+class
+    SwapChain {
 public:
-    Swapchain() = default;
-    ~Swapchain() = default;
+    SwapChain() = default;
+    ~SwapChain() = default;
 
-    void init(Device& device,
-        DeviceContext& deviceContext,
-        Texture& backBuffer,
-        Window& window);
+    HRESULT
+        init(Device& device,
+            DeviceContext& deviceContext,
+            Texture& backBuffer,
+            Window window);
 
-    void update();
+    void
+        update();
 
-    void render();
+    void
+        render();
 
-    void destroy();
+    void
+        destroy();
 
-    void present();
+    void
+        present();
 
+public:
     IDXGISwapChain* m_swapchain = nullptr;
     D3D_DRIVER_TYPE m_driverType = D3D_DRIVER_TYPE_NULL;
-
 private:
     D3D_FEATURE_LEVEL m_featureLevel = D3D_FEATURE_LEVEL_11_0;
-
     // MSAA Configuration
-    // Para evitar que los píxeles se vean con un efecto de "serrucho" (aliasing) en DirectX 11 con C++,
-    // se puede utilizar una técnica llamada anti-aliasing.
-
-    // Multisample Anti-Aliasing (MSAA)
-    // MSAA es una técnica que suaviza los bordes de los objetos al muestrear varios puntos por píxel.
-    // Para habilitar MSAA en DirectX 11:
-
-    unsigned int m_sampleCount; // Number of MSAA samples (4x MSAA)
+    /*
+     * Para evitar que los píxeles se vean con un efecto de "serrucho" (aliasing) en DirectX 11 con C++,
+     * se puede utilizar una técnica llamada anti-aliasing.
+     *
+     * Multisample Anti-Aliasing (MSAA)
+     * MSAA es una técnica que suaviza los bordes de los objetos al muestrear varios puntos por píxel.
+     * Para habilitar MSAA en DirectX 11:
+     *
+     */
+    unsigned int m_sampleCount;  // Number of MSAA samples (4x MSAA)
     unsigned int m_qualityLevels;
 
     // Punteros a las interfaces DXGI

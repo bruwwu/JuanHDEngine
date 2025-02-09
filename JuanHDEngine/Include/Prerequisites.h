@@ -39,30 +39,30 @@
 
 // Structures
 struct
-    SimpleVertex {
-    XMFLOAT3 Pos;
-    XMFLOAT2 Tex;
+	SimpleVertex {
+	XMFLOAT3 Pos;
+	XMFLOAT2 Tex;
 };
 
 struct
-    CBNeverChanges {
-    XMMATRIX mView;
+	CBNeverChanges {
+	XMMATRIX mView;
 };
 
 struct
-    CBChangeOnResize {
-    XMMATRIX mProjection;
+	CBChangeOnResize {
+	XMMATRIX mProjection;
 };
 
 struct
-    CBChangesEveryFrame {
-    XMMATRIX mWorld;
-    XMFLOAT4 vMeshColor;
+	CBChangesEveryFrame {
+	XMMATRIX mWorld;
+	XMFLOAT4 vMeshColor;
 };
 
 enum ExtensionType
 {
-    DDS = 0,
-    PNG = 1,
-    JPG = 2
+	DDS = 0,
+	PNG = 1,
+	JPG = 2
 };

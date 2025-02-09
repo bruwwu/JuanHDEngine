@@ -1,4 +1,5 @@
-﻿#include "Texture.h"
+﻿#define STB_IMAGE_IMPLEMENTATION
+#include "Texture.h"
 #include "Device.h"
 #include "DeviceContext.h"
 #include "stb_image.h"
