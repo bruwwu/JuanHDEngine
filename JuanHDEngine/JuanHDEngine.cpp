@@ -4,6 +4,8 @@
 #include "DeviceContext.h"
 #include "Swapchain.h"
 #include "Texture.h"
+#include "RenderTargetView.h"
+#include "DepthStencilView.h"
 
 // Global Variables
 Window															g_window;
@@ -11,6 +13,10 @@ Device															g_device;
 DeviceContext												g_deviceContext;
 SwapChain														g_swapchain;
 Texture															g_backBuffer;
+Texture															g_depthStencil;
+RenderTargetView										g_renderTargetView;
+DepthStencilView										g_depthStencilView;
+
 
 ID3D11RenderTargetView* g_pRenderTargetView = nullptr;
 ID3D11Texture2D* g_pDepthStencil = nullptr;
