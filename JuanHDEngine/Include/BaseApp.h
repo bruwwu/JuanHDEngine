@@ -1,5 +1,5 @@
 #pragma once
-#include "Prerequisites.h"
+#include "PreRequisites.h"
 #include "Window.h"
 
 class
@@ -9,24 +9,26 @@ public:
 	~BaseApp() = default;
 
 	HRESULT
-		init();
+	init();
 
 	void
-		update();
+	update();
 
 	void
-		render();
+	render();
 
 	void
-		destroy();
+	destroy();
 
+	/** @brief Ejecuta el bucle principal de la aplicación. */
 	int
-		run(HINSTANCE hInstance,
-			HINSTANCE hPrevInstance,
-			LPWSTR lpCmdLine,
-			int nCmdShow,
-			WNDPROC wndproc);
+	run(HINSTANCE hInstance,
+		HINSTANCE hPrevInstance,
+		LPWSTR lpCmdLine,
+		int nCmdShow,
+		WNDPROC wndproc);
 
 private:
+	/** @brief Ventana principal de la aplicación. */
 	Window m_window;
 };

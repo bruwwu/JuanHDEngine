@@ -11,17 +11,24 @@ public:
 	DepthStencilView() = default;
 	~DepthStencilView() = default;
 
+	/** @brief Inicializa la vista de profundidad y stencil. */
 	HRESULT
-		init(Device& device, Texture& depthStencil, DXGI_FORMAT format);
+	init(Device& device,
+		Texture& depthStencil,
+		DXGI_FORMAT format);
 
+	/** @brief Actualiza el estado de la vista de profundidad y stencil. */
 	void
-		update();
+	update();
 
+	/** @brief Renderiza utilizando la vista de profundidad y stencil. */
 	void
-		render(DeviceContext& deviceContext);
+	render(DeviceContext& deviceContext);
 
+	/** @brief Libera los recursos de la vista de profundidad y stencil. */
 	void
-		destroy();
+	destroy();
+
 public:
 	ID3D11DepthStencilView* m_depthStencilView = nullptr;
 };
