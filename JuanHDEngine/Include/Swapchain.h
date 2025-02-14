@@ -15,26 +15,25 @@ public:
 
 	/** @brief Inicializa el SwapChain con el dispositivo, contexto y buffer de respaldo. */
 	HRESULT
-		init(Device& device,
+	init(Device& device,
 			DeviceContext& deviceContext,
 			Texture& backBuffer,
 			Window window);
 
-	/** @brief Actualiza el estado del SwapChain. */
+	
 	void
-		update();
+	update();
 
-	/** @brief Renderiza utilizando el SwapChain. */
+	
 	void
-		render();
+	render();
 
-	/** @brief Libera los recursos del SwapChain. */
-	void
-		destroy();
 
-	/** @brief Presenta el contenido del buffer en pantalla. */
 	void
-		present();
+	destroy();
+
+	void
+	present();
 
 public:
 	IDXGISwapChain* m_swapchain = nullptr;

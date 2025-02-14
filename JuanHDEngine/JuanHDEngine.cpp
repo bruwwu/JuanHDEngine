@@ -327,6 +327,7 @@ InitDevice() {
 		return hr;
 
 	// Load the Texture
+	//yon deja de chaquetearme :c
 	hr = D3DX11CreateShaderResourceViewFromFile(g_device.m_device, "seafloor.dds", nullptr, nullptr, &g_pTextureRV, nullptr);
 	if (FAILED(hr))
 		return hr;
