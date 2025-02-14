@@ -2,8 +2,8 @@
 
 HRESULT
 Device::CreateRenderTargetView(ID3D11Resource* pResource,
-    const D3D11_RENDER_TARGET_VIEW_DESC* pDesc,
-    ID3D11RenderTargetView** ppRTView) {
+                                const D3D11_RENDER_TARGET_VIEW_DESC* pDesc,
+                                ID3D11RenderTargetView** ppRTView) {
     // Validar prametros de entrada
     if (!pResource) {
         ERROR("Device", "CreateRenderTargetView", "pResurce is nullptr");
@@ -31,8 +31,8 @@ Device::CreateRenderTargetView(ID3D11Resource* pResource,
 
 HRESULT
 Device::CreateTexture2D(const D3D11_TEXTURE2D_DESC* pDesc,
-    const D3D11_SUBRESOURCE_DATA* pInitialData,
-    ID3D11Texture2D** ppTexture2D) {
+                        const D3D11_SUBRESOURCE_DATA* pInitialData,
+                        ID3D11Texture2D** ppTexture2D) {
     if (!pDesc) {
         ERROR("Device", "CreateTexture2D", "pDesc is nullptr");
         return E_INVALIDARG;
@@ -57,8 +57,8 @@ Device::CreateTexture2D(const D3D11_TEXTURE2D_DESC* pDesc,
 
 HRESULT
 Device::CreateDepthStencilView(ID3D11Resource* pResource,
-    const D3D11_DEPTH_STENCIL_VIEW_DESC* pDesc,
-    ID3D11DepthStencilView** ppDepthStencilView) {
+                                const D3D11_DEPTH_STENCIL_VIEW_DESC* pDesc,
+                                ID3D11DepthStencilView** ppDepthStencilView) {
     if (!pResource) {
         ERROR("Device", "CreateDepthStencilView", "pResource is nullptr");
         return E_INVALIDARG;
@@ -83,9 +83,9 @@ Device::CreateDepthStencilView(ID3D11Resource* pResource,
 
 HRESULT
 Device::CreateVertexShader(const void* pShaderBytecode,
-    unsigned int BytecodeLength,
-    ID3D11ClassLinkage* pClassLinkage,
-    ID3D11VertexShader** ppVertexShader) {
+                            unsigned int BytecodeLength,
+                            ID3D11ClassLinkage* pClassLinkage,
+                            ID3D11VertexShader** ppVertexShader) {
     if (!pShaderBytecode) {
         ERROR("Device", "CreateVertexShader", "pShaderBytecode is nullptr");
         return E_INVALIDARG;
@@ -110,10 +110,10 @@ Device::CreateVertexShader(const void* pShaderBytecode,
 
 HRESULT
 Device::CreateInputLayout(D3D11_INPUT_ELEMENT_DESC* pInputElementDescs,
-    unsigned int NumElements,
-    const void* pShaderBytecodeWithInputSignature,
-    unsigned int BytecodeLength,
-    ID3D11InputLayout** ppInputLayout) {
+                        unsigned int NumElements,
+                        const void* pShaderBytecodeWithInputSignature,
+                        unsigned int BytecodeLength,
+                        ID3D11InputLayout** ppInputLayout) {
     if (!pInputElementDescs) {
         ERROR("Device", "CreateInputLayout", "pInputElementDescs is nullptr");
         return E_INVALIDARG;

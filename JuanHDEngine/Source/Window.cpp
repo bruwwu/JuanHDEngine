@@ -1,7 +1,8 @@
 #include "Window.h"
 
 HRESULT
-Window::init(HINSTANCE hInstance, int nCmdShow, WNDPROC wndproc) {
+Window::init(HINSTANCE hInstance,
+			int nCmdShow, WNDPROC wndproc) {
 	// Store  instance of the class
 	m_hInst = hInstance;
 

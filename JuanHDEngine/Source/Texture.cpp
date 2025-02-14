@@ -4,7 +4,10 @@
 #include "DeviceContext.h"
 #include "stb_image.h"
 
-HRESULT Texture::init(Device device, const std::string& textureName, ExtensionType extensionType)
+HRESULT 
+Texture::init(Device device,
+			const std::string& textureName,
+			ExtensionType extensionType)
 {
 	if (!device.m_device)
 	{
@@ -91,7 +94,8 @@ HRESULT Texture::init(Device device, const std::string& textureName, ExtensionTy
 	return hr;
 }
 
-HRESULT Texture::init(Device device,
+HRESULT 
+Texture::init(Device device,
 	unsigned int width,
 	unsigned int height,
 	DXGI_FORMAT format,
@@ -134,10 +138,14 @@ HRESULT Texture::init(Device device,
 	return hr;
 }
 
-void Texture::update() {
+void 
+Texture::update() {
 }
 
-void Texture::render(DeviceContext& deviceContext, unsigned int StartSlot, unsigned int NumViews) {
+void 
+Texture::render(DeviceContext& deviceContext,
+				unsigned int StartSlot,
+				unsigned int NumViews) {
 	if (m_textureFromImg) {
 		ID3D11ShaderResourceView* nullSRV[] = { nullptr };
 		deviceContext.PSSetShaderResources(StartSlot, NumViews, nullSRV);
@@ -148,7 +156,8 @@ void Texture::render(DeviceContext& deviceContext, unsigned int StartSlot, unsig
 	}
 }
 
-void Texture::destroy() {
+void 
+Texture::destroy() {
 	SAFE_RELEASE(m_texture);
 	SAFE_RELEASE(m_textureFromImg);
 }

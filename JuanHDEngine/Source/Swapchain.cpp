@@ -4,7 +4,8 @@
 #include "Window.h"
 #include "Texture.h"
 
-HRESULT SwapChain::init(Device& device,
+HRESULT 
+SwapChain::init(Device& device,
     DeviceContext& deviceContext,
     Texture& backBuffer,
     Window window) {
@@ -120,7 +121,8 @@ HRESULT SwapChain::init(Device& device,
     return S_OK;
 }
 
-void SwapChain::update() {
+void 
+SwapChain::update() {
     // Se puede agregar código para manejar eventos de SwapChain si es necesario
 }
 
@@ -128,14 +130,16 @@ void SwapChain::render() {
     // Este método puede expandirse para gestionar múltiples buffers de renderizado
 }
 
-void SwapChain::destroy() {
+void 
+SwapChain::destroy() {
     SAFE_RELEASE(m_swapchain);
     SAFE_RELEASE(m_dxgiFactory);
     SAFE_RELEASE(m_dxgiAdapter);
     SAFE_RELEASE(m_dxgiDevice);
 }
 
-void SwapChain::present() {
+void 
+SwapChain::present() {
     if (m_swapchain) {
         HRESULT hr = m_swapchain->Present(0, 0);
         if (FAILED(hr)) {
