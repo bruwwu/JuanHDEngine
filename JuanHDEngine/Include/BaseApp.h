@@ -24,12 +24,16 @@ public:
 	void
 	update();
 
+	HRESULT
+    updatePositionByKB();
 	void
 	render();
 
 	void
 	destroy();
 
+	HRESULT
+		resizeWindow(HWND hWnd, LPARAM lParam);
 
 	/** @brief Ejecuta el bucle principal de la aplicación. */
 	int
@@ -63,10 +67,15 @@ public:
 	ID3D11SamplerState*									g_pSamplerLinear = nullptr;
 	Texture															g_textureRV;
 
-	XMMATRIX                            g_World;
+	XMMATRIX                            g_modelMatrix;
 	XMMATRIX                            g_View;
 	XMMATRIX                            g_Projection;
 	XMFLOAT4                            g_vMeshColor;
+
+  XMFLOAT3                            position;
+  XMFLOAT3                            rotation;
+  XMFLOAT3                            scale;
+  //Posicion, rotacion y escala del objeto
 
 	CBChangesEveryFrame									cb;
 	CBNeverChanges											cbNeverChanges;

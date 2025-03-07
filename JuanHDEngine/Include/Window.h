@@ -19,6 +19,9 @@ public:
 	void
 		destroy();
 
+	HRESULT
+		ResizeWindow();
+
 public:
 	HWND m_hWnd = nullptr;
 	unsigned int m_width;

@@ -233,7 +233,14 @@ BaseApp::init() {
 	/*Se movió esta partecita al SamplerState, que pro*/
 
 	// Initialize the world matrices
-	g_World = XMMatrixIdentity();
+	g_modelMatrix = XMMatrixIdentity();
+
+	//Escala del objeto, 
+  scale.x = 1.0f;
+  scale.y = 1.0f;
+  scale.z = 1.0f;
+
+ 
 
 	// Initialize the view matrix
 	XMVECTOR Eye = XMVectorSet(0.0f, 3.0f, -6.0f, 0.0f);
@@ -261,7 +268,7 @@ BaseApp::update() {
 	}
 
 	// Actualizar la rotaci�n del objeto y el color
-	g_World = XMMatrixRotationY(t);
+	g_modelMatrix = XMMatrixRotationY(t);
 	g_vMeshColor = XMFLOAT4(
 		(sinf(t * 1.0f) + 1.0f) * 0.5f,
 		(cosf(t * 3.0f) + 1.0f) * 0.5f,
@@ -269,8 +276,17 @@ BaseApp::update() {
 		1.0f
 	);
 
+	//Rotacion del objeto
+	rotation.y = t;
+
+  XMMATRIX scaleMatrix = XMMatrixScaling(scale.x, scale.y, scale.z);
+  XMMATRIX rotationMatrix = XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, rotation.z);
+  XMMATRIX translationMatrix = XMMatrixTranslation(position.x, position.y, position.z);
+
+	g_modelMatrix = scaleMatrix * rotationMatrix * translationMatrix;
+
 	// Actualizar el buffer constante del frame
-	cb.mWorld = XMMatrixTranspose(g_World);
+	cb.mWorld = XMMatrixTranspose(g_modelMatrix);
 	cb.vMeshColor = g_vMeshColor;
 	//g_deviceContext.UpdateSubresource(g_pCBChangesEveryFrame, 0, nullptr, &cb, 0, 0);
 	g_changeEveryFrame.update(g_deviceContext, 0, nullptr, &cb, 0, 0);
@@ -391,3 +407,74 @@ BaseApp::run(HINSTANCE hInstance,
 
 	return (int)msg.wParam;
 }
+
+HRESULT
+BaseApp::resizeWindow(HWND hWnd, LPARAM lParam) {
+
+	if (g_swapchain.m_swapchain)
+	{
+    HRESULT hr = S_OK;
+
+    // Liberar los valores anteriores del RTV, DS, DSV, Back Buffer
+    g_renderTargetView.destroy();
+    g_depthStencil.destroy();
+    g_depthStencilView.destroy();
+    g_backBuffer.destroy();
+
+    // Redimensionar los datos del ancho y alto de la ventana
+    g_window.m_width = LOWORD(lParam);
+    g_window.m_height = HIWORD(lParam);
+
+    // Redimensionar el buffer del swapchain
+    hr = g_swapchain.m_swapchain->ResizeBuffers(0, g_window.m_width, g_window.m_height, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
+    if (FAILED(hr)){
+      ERROR("SwapChain", "resizeWindow", "Failed to resize swapchain buffers");
+      return hr;
+		}
+
+    // Recrear backbuffer, revisar Swapchain
+		hr = g_swapchain.m_swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&g_backBuffer.m_texture));
+    if (FAILED(hr))
+      return hr;
+
+    // Recrear el RTV
+    hr = g_renderTargetView.init(g_device, g_backBuffer, DXGI_FORMAT_R8G8B8A8_UNORM);
+    if (FAILED(hr))
+      return hr;
+
+    // Recrear DS
+    hr = g_depthStencil.init(g_device, g_window.m_width, g_window.m_height, DXGI_FORMAT_D24_UNORM_S8_UINT, D3D11_BIND_DEPTH_STENCIL, 4, 0);
+    if (FAILED(hr))
+      return hr;
+
+    // Recrear DSV
+    hr = g_depthStencilView.init(g_device, g_depthStencil, DXGI_FORMAT_D24_UNORM_S8_UINT);
+    if (FAILED(hr))
+      return hr;
+
+    // Actualizar viewport
+    hr = g_viewport.init(g_window);
+    if (FAILED(hr))
+      return hr;
+
+    // Actualizar la proyección, o sea, ChangeOnResize
+		g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, g_window.m_width / (float)g_window.m_height, 0.01f, 100.0f);
+		cbChangesOnResize.mProjection = XMMatrixTranspose(g_Projection);
+		g_changeOnResize.update(g_deviceContext, 0, nullptr, &cbChangesOnResize, 0, 0);
+
+    return S_OK;
+  }
+	}
+
+	/*
+	1. Validar que existe el swapchain
+	2. Destruir los valores anteriores del RTV, DS, DSV, Back Buffer
+	3. Ya destruidos los valores, redimenzionar los datos del ancho y alto de la ventana
+	4. Redimenzionar el buffer del swapchain
+	5. Si algo falla se manda un error bien yon
+	6. Recrear backbuffer, revisar Swapchain
+	7. Recrear el RTV
+	8. Recrear DS
+	9. Recrear DSV
+	10. Actualizar viewport
+	11. Actualizar la proyección, o sea, ChangeOnResize*/
