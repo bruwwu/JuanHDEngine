@@ -268,6 +268,7 @@ BaseApp::update() {
 	}
 
 	updateTransalationbyKeys(t);
+	
 
 	// Actualizar la rotaci�n del objeto y el color
 	g_modelMatrix = XMMatrixRotationY(t);
@@ -289,18 +290,23 @@ BaseApp::update() {
 
 	// Actualizar el buffer constante del frame
 	cb.mWorld = XMMatrixTranspose(g_modelMatrix);
+	g_vMeshColor = XMFLOAT4(
+		(sinf(t * 1.0f) + 1.0f) * 0.5f,
+		(cosf(t * 3.0f) + 1.0f) * 0.5f,
+		(sinf(t * 5.0f) + 1.0f) * 0.5f,
+		1.0f
+	);
 	cb.vMeshColor = g_vMeshColor;
+
+
 	//g_deviceContext.UpdateSubresource(g_pCBChangesEveryFrame, 0, nullptr, &cb, 0, 0);
 	g_changeEveryFrame.update(g_deviceContext, 0, nullptr, &cb, 0, 0);
 
 	// Actualizar la matriz de proyecci�n
-	g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, g_window.m_width / (float)g_window.m_height, 0.01f, 100.0f);
+	float FOV = XMConvertToRadians(90.0F);
+	g_Projection = XMMatrixPerspectiveFovLH(FOV, g_window.m_width / (float)g_window.m_height, 0.01f, 10000.0f);
 
-	// Actualizar la vista (si es necesario cambiar din�micamente)
-	cbNeverChanges.mView = XMMatrixTranspose(g_View);
-	//g_deviceContext.UpdateSubresource(g_pCBNeverChanges, 0, nullptr, &cbNeverChanges, 0, 0);
-	g_neverChanges.update(g_deviceContext, 0, nullptr, &cbNeverChanges, 0, 0);
-
+	updateCamera();
 	// Actualizar la proyecci�n en el buffer constante
 	cbChangesOnResize.mProjection = XMMatrixTranspose(g_Projection);
 	//g_deviceContext.UpdateSubresource(g_pCBChangeOnResize, 0, nullptr, &cbChangesOnResize, 0, 0);
@@ -311,6 +317,73 @@ BaseApp::update() {
 	en donde no era, todo bobomensotonto*/
 }
 
+void
+BaseApp::updateCamera() {
+	// Convertir la dirección a vectores normalizados
+	XMVECTOR pos = XMLoadFloat3(&g_camera.position);
+	XMVECTOR dir = XMLoadFloat3(&g_camera.forward);
+	XMVECTOR up = XMLoadFloat3(&g_camera.up);
+
+	// Calcular la nueva vista
+	g_View = XMMatrixLookAtLH(pos, pos + dir, up);
+
+	// Transponer y actualizar el buffer de la vista
+	cbNeverChanges.mView = XMMatrixTranspose(g_View);
+	g_neverChanges.update(g_deviceContext, 0, nullptr, &cbNeverChanges, 0, 0);
+}
+
+void
+BaseApp::updateTransalationbyKeys(float deltaTime) {
+	float moveSpeed = 0.001f; // Velocidad de movimiento
+	float moveSpeedCamera = 0.01f; // Velocidad de movimiento
+
+	if (keys[VK_UP])    position.y += moveSpeed * deltaTime; // Mueve arriba
+	if (keys[VK_DOWN])  position.y -= moveSpeed * deltaTime; // Mueve abajo
+	if (keys[VK_LEFT])  position.x -= moveSpeed * deltaTime; // Mueve izquierda
+	if (keys[VK_RIGHT]) position.x += moveSpeed * deltaTime; // Mueve derecha
+	if (keys['E'])      position.z += moveSpeed * deltaTime; // Avanza en Z
+	if (keys['Q'])      position.z -= moveSpeed * deltaTime; // Retrocede en Z
+
+	XMVECTOR pos = XMLoadFloat3(&g_camera.position);
+	XMVECTOR forward = XMLoadFloat3(&g_camera.forward);
+	XMVECTOR right = XMLoadFloat3(&g_camera.right);
+
+	if (keys['W']) pos += forward * moveSpeedCamera;
+	if (keys['S']) pos -= forward * moveSpeedCamera;
+	if (keys['A']) pos -= right * moveSpeedCamera;
+	if (keys['D']) pos += right * moveSpeedCamera;
+
+	XMStoreFloat3(&g_camera.position, pos);
+
+}
+
+void BaseApp::rotateCamera(int mouseX, int mouseY)
+{
+	float offsetX = (mouseX - lastX) * sensitivity;
+	float offsetY = (mouseY - lastY) * sensitivity;
+	lastX = mouseX;
+	lastY = mouseY;
+
+	g_camera.yaw += offsetX;
+	g_camera.pitch += offsetY;
+
+	// Limitar la inclinación de la cámara
+	if (g_camera.pitch > 1.5f) g_camera.pitch = 1.5f;
+	if (g_camera.pitch < -1.5f) g_camera.pitch = -1.5f;
+
+	// Recalcular la dirección hacia adelante
+	XMVECTOR forward = XMVectorSet(
+		cosf(g_camera.yaw) * cosf(g_camera.pitch),
+		sinf(g_camera.pitch),
+		sinf(g_camera.yaw) * cosf(g_camera.pitch),
+		0.0f
+	);
+
+	XMVECTOR right = XMVector3Cross(forward, XMLoadFloat3(&g_camera.up));
+
+	XMStoreFloat3(&g_camera.forward, XMVector3Normalize(forward));
+	XMStoreFloat3(&g_camera.right, XMVector3Normalize(right));
+}
 
 void
 BaseApp::render() {
@@ -375,25 +448,7 @@ BaseApp::destroy() {
 }
 
 
-void
-BaseApp::updateTransalationbyKeys(float deltaTime) {
-	float moveSpeed = .01f; // Velocidad de movimiento
 
-	//switch (key) {
-	//case VK_UP:    position.y += moveSpeed; break;  // Mover arriba
-	//case VK_DOWN:  position.y -= moveSpeed; break;  // Mover abajo
-	//case VK_LEFT:  position.x -= moveSpeed; break;  // Mover izquierda
-	//case VK_RIGHT: position.x += moveSpeed; break;  // Mover derecha
-	//case 'W':      position.z += moveSpeed; break;  // Avanzar en Z
-	//case 'S':      position.z -= moveSpeed; break;  // Retroceder en Z
-	//}
-	if (keys[VK_UP])    position.y += moveSpeed * deltaTime; // Mueve arriba
-	if (keys[VK_DOWN])  position.y -= moveSpeed * deltaTime; // Mueve abajo
-	if (keys[VK_LEFT])  position.x -= moveSpeed * deltaTime; // Mueve izquierda
-	if (keys[VK_RIGHT]) position.x += moveSpeed * deltaTime; // Mueve derecha
-	if (keys['W'])      position.z += moveSpeed * deltaTime; // Avanza en Z
-	if (keys['S'])      position.z -= moveSpeed * deltaTime; // Retrocede en Z
-}
 
 
 int

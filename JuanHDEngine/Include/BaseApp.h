@@ -23,11 +23,14 @@ public:
 
 	void
 	update();
-
-	HRESULT
-    updatePositionByKB();
 	void
 	render();
+
+	void
+		rotateCamera(int mouseX, int mouseY);
+
+	void
+		updateCamera();
 
 	void
 	destroy();
@@ -86,4 +89,9 @@ public:
 
 
 	bool keys[256] = { false };
+	Camera g_camera;
+  bool mouseLeftDown = false;
+	int lastY;
+	int lastX;
+	float sensitivity = 0.03f;
 };
