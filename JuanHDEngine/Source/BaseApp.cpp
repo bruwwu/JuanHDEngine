@@ -267,6 +267,8 @@ BaseApp::update() {
 		t = (dwTimeCur - dwTimeStart) / 1000.0f;
 	}
 
+	updateTransalationbyKeys(t);
+
 	// Actualizar la rotaci�n del objeto y el color
 	g_modelMatrix = XMMatrixRotationY(t);
 	g_vMeshColor = XMFLOAT4(
@@ -370,6 +372,27 @@ BaseApp::destroy() {
 	g_swapchain.destroy();
 	g_deviceContext.destroy();
 	g_device.destroy();
+}
+
+
+void
+BaseApp::updateTransalationbyKeys(float deltaTime) {
+	float moveSpeed = .01f; // Velocidad de movimiento
+
+	//switch (key) {
+	//case VK_UP:    position.y += moveSpeed; break;  // Mover arriba
+	//case VK_DOWN:  position.y -= moveSpeed; break;  // Mover abajo
+	//case VK_LEFT:  position.x -= moveSpeed; break;  // Mover izquierda
+	//case VK_RIGHT: position.x += moveSpeed; break;  // Mover derecha
+	//case 'W':      position.z += moveSpeed; break;  // Avanzar en Z
+	//case 'S':      position.z -= moveSpeed; break;  // Retroceder en Z
+	//}
+	if (keys[VK_UP])    position.y += moveSpeed * deltaTime; // Mueve arriba
+	if (keys[VK_DOWN])  position.y -= moveSpeed * deltaTime; // Mueve abajo
+	if (keys[VK_LEFT])  position.x -= moveSpeed * deltaTime; // Mueve izquierda
+	if (keys[VK_RIGHT]) position.x += moveSpeed * deltaTime; // Mueve derecha
+	if (keys['W'])      position.z += moveSpeed * deltaTime; // Avanza en Z
+	if (keys['S'])      position.z -= moveSpeed * deltaTime; // Retrocede en Z
 }
 
 

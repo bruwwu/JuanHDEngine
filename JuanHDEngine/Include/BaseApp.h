@@ -35,6 +35,9 @@ public:
 	HRESULT
 		resizeWindow(HWND hWnd, LPARAM lParam);
 
+	void
+		updateTransalationbyKeys(float deltaTime);
+
 	/** @brief Ejecuta el bucle principal de la aplicación. */
 	int
 	run(HINSTANCE hInstance,
@@ -80,4 +83,7 @@ public:
 	CBChangesEveryFrame									cb;
 	CBNeverChanges											cbNeverChanges;
 	CBChangeOnResize										cbChangesOnResize; //olayonesi
+
+
+	bool keys[256] = { false };
 };

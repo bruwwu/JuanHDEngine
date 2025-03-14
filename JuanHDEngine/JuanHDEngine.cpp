@@ -27,6 +27,14 @@ WndProc(HWND hWnd, unsigned int message, WPARAM wParam, LPARAM lParam) {
     PostQuitMessage(0);
     break;
 
+  case WM_KEYDOWN:
+    g_app.keys[wParam] = true;
+    break;
+    
+  case WM_KEYUP:
+    g_app.keys[wParam] = false;
+    break;
+
   default:
     return DefWindowProc(hWnd, message, wParam, lParam);
   }
