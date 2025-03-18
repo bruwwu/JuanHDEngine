@@ -19,7 +19,7 @@ public:
 	void
 		destroy();
 
-	HRESULT
+	void
 		ResizeWindow();
 
 public:

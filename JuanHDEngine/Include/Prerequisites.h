@@ -16,6 +16,12 @@
 #include "Resource.h"
 #include "resource.h"
 
+//ImGui
+#include <imgui.h>
+#include <imgui_impl_dx11.h>
+#include <imgui_internal.h>
+#include "imgui_impl_win32.h"
+
 // MACROS
 #define SAFE_RELEASE(x) if(x != nullptr) x->Release(); x = nullptr;
 

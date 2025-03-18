@@ -231,6 +231,7 @@ BaseApp::init() {
 	//if (FAILED(hr))
 	//	return hr;
 	/*Se movió esta partecita al SamplerState, que pro*/
+	g_ui.init(g_window.m_hWnd, g_device.m_device, g_deviceContext.m_deviceContext);
 
 	// Initialize the world matrices
 	g_modelMatrix = XMMatrixIdentity();
@@ -248,13 +249,14 @@ BaseApp::init() {
   XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	g_View = XMMatrixLookAtLH(Eye, At, Up);
 	return S_OK;
-
 }
+
 
 
 void
 BaseApp::update() {
 	// Actualizar tiempo y rotaci�n
+	g_ui.update();
 	static float t = 0.0f;
 	if (g_swapchain.m_driverType == D3D_DRIVER_TYPE_REFERENCE) {
 		t += (float)XM_PI * 0.0125f;
@@ -267,6 +269,16 @@ BaseApp::update() {
 		t = (dwTimeCur - dwTimeStart) / 1000.0f;
 	}
 
+ 
+
+  // Renderizar UI
+  ImGui::Begin("pruebaRender");
+	if (ImGui::IsWindowHovered())
+	{
+
+	}
+		
+  ImGui::End();
 	updateTransalationbyKeys(t);
 	
 
@@ -319,6 +331,10 @@ BaseApp::update() {
 
 void
 BaseApp::updateCamera() {
+
+	if (ImGui::GetIO().WantCaptureMouse){
+    mouseLeftDown = false; //Si caprura el mouse, no se puede mover la camara, yi yi papá
+	}
 	// Convertir la dirección a vectores normalizados
 	XMVECTOR pos = XMLoadFloat3(&g_camera.position);
 	XMVECTOR dir = XMLoadFloat3(&g_camera.forward);
@@ -421,6 +437,7 @@ BaseApp::render() {
 	// Dibujar
 	g_deviceContext.DrawIndexed(36, 0, 0);
 
+  g_ui.render();
 	// Presentar el frame en pantalla
 	g_swapchain.present();
 }
@@ -439,6 +456,7 @@ BaseApp::destroy() {
 	g_indexBuffer.destroy();
 	g_shaderProgram.destroy();
 
+  g_ui.destroy();
 	g_depthStencil.destroy();
 	g_depthStencilView.destroy();
 	g_renderTargetView.destroy();
@@ -502,6 +520,7 @@ BaseApp::resizeWindow(HWND hWnd, LPARAM lParam) {
     // Redimensionar los datos del ancho y alto de la ventana
     g_window.m_width = LOWORD(lParam);
     g_window.m_height = HIWORD(lParam);
+
 
     // Redimensionar el buffer del swapchain
     hr = g_swapchain.m_swapchain->ResizeBuffers(0, g_window.m_width, g_window.m_height, DXGI_FORMAT_R8G8B8A8_UNORM, 0);

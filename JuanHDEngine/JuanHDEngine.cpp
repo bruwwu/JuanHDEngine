@@ -8,8 +8,13 @@ BaseApp                              g_app;
 // Entry point to the program. Initializes everything and goes into a message processing 
 // loop. Idle time is used to render the scene.
 //--------------------------------------------------------------------------------------
+
+LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, unsigned int message, WPARAM wParam, LPARAM lParam);
+
 LRESULT CALLBACK
 WndProc(HWND hWnd, unsigned int message, WPARAM wParam, LPARAM lParam) {
+    if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+      return true;
   PAINTSTRUCT ps;
   HDC hdc;
 

@@ -12,6 +12,7 @@
 #include "ShaderProgram.h"
 #include "Buffer.h"
 #include "MeshComponent.h"
+#include "UI.h"
 class
 	BaseApp {
 public:
@@ -72,6 +73,7 @@ public:
 	Buffer															g_changeEveryFrame;
 	ID3D11SamplerState*									g_pSamplerLinear = nullptr;
 	Texture															g_textureRV;
+  UI                                  g_ui;
 
 	XMMATRIX                            g_modelMatrix;
 	XMMATRIX                            g_View;
