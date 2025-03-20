@@ -272,13 +272,7 @@ BaseApp::update() {
  
 
   // Renderizar UI
-  ImGui::Begin("pruebaRender");
-	if (ImGui::IsWindowHovered())
-	{
-
-	}
-		
-  ImGui::End();
+  g_ui.Inspector();
 	updateTransalationbyKeys(t);
 	
 

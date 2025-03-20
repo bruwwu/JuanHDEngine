@@ -26,6 +26,12 @@ public:
     baseStyleGUI();
 
   void
+    renderWindow();
+
+  void
+    Inspector();
+
+  void
     vec3Control(std::string label,
         float* value,
         float resetValues = 0.0f,

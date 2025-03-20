@@ -1,7 +1,9 @@
 #include "UI.h"
 #include "Prerequisites.h"
+#include "BaseApp.h"
 
-
+extern BaseApp g_app; //Antes de esto lo estaba haciendo sin el extern, por lo que entendí asi no creo una 
+//nueva instancia de BaseApp, sino que uso la que ya tengo creada en BaseApp.cpp
 
 void 
 UI::init(void* window, ID3D11Device* device, ID3D11DeviceContext* deviceContext)
@@ -13,7 +15,9 @@ UI::init(void* window, ID3D11Device* device, ID3D11DeviceContext* deviceContext)
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;        // Enable Gamepad Controls
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+  io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 
+  // Setup Dear ImGui style
   baseStyleGUI();
 
   // Setup Dear ImGui style
@@ -65,6 +69,34 @@ UI::destroy()
   ImGui::DestroyContext();
 }
 
+void
+UI::renderWindow() {
+  ImGui::Begin("yonesi de fortnite");
+  ImGui::Text("Inserte Textura");
+  ImGui::End();
+}
+
+void 
+UI::Inspector()
+{
+  // Crea una nueva ventana
+  ImGui::Begin("Cube Transform");
+
+  // Controles para la posición del cubo
+  ImGui::Text("Position");
+  ImGui::DragFloat3("Position", reinterpret_cast<float*>(&g_app.position), 0.1f);
+
+  // Controles para la rotación del cubo
+  ImGui::Text("Rotation");
+  ImGui::DragFloat3("Rotation", reinterpret_cast<float*>(&g_app.rotation), 0.1f);
+
+  // Controles para la escala del cubo
+  ImGui::Text("Scale");
+  ImGui::DragFloat3("Scale", reinterpret_cast<float*>(&g_app.scale), 0.1f);
+
+  // Termina la ventana
+  ImGui::End();
+}
 
 void
 UI::baseStyleGUI() {
