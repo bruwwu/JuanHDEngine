@@ -273,6 +273,7 @@ BaseApp::update() {
 
   // Renderizar UI
   g_ui.Inspector();
+  g_ui.renderWindow();
 	updateTransalationbyKeys(t);
 	
 
