@@ -21,6 +21,16 @@
 #include <imgui_internal.h>
 #include "imgui_impl_win32.h"
 
+// EngineUtilities
+#include "Utilities\Memory/TSharedPointer.h"
+#include "Utilities\Memory/TStaticPtr.h"
+#include "Utilities\Memory/TWeakPointer.h"
+#include "Utilities\Memory\TUniquePtr.h"
+
+//Mathmamadams
+#include "Utilities\Vectors\Vector3.h"
+#include "Utilities\Matrix\Matrix4x4.h"
+
 // **MACROS**
 /**
  * @brief Libera de forma segura un recurso COM.
