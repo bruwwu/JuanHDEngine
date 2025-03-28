@@ -1,38 +1,71 @@
 #include "ModelLoader.h"
 
 bool
+ModelLoader::InitializeFBXManager() {
+
+	lSdkManager = FbxManager::Create();
+  if (!lSdkManager) {
+    ERROR("ModelLoader", "InitializeFBXManager", "Unable to create FBX manager.");
+    return false;
+  }
+	else
+	{
+		MESSAGE("ModelLoader", "InitializeFBXManager", "Successfully created FBX manager." << lSdkManager->GetVersion());
+	}
+
+  FbxIOSettings* ios = FbxIOSettings::Create(lSdkManager, IOSROOT);
+  lSdkManager->SetIOSettings(ios);
+
+	//New FBX scene
+  lScene = FbxScene::Create(lSdkManager, "myScene");
+	return true;
+}
+
+bool
 ModelLoader::LoadFBXModel(const std::string& filePath) {
-	// 01. Create an importer using the SDK manager
-	FbxImporter* lImporter = FbxImporter::Create(lSdkManager, "");
+  //0	Initialize FBX Manager
+	if (InitializeFBXManager()) {
+		// 01. Create an importer using the SDK manager
+		FbxImporter* lImporter = FbxImporter::Create(lSdkManager, "");
 
-	// 02. Use the first argument as the filename for the importer
-	if (!lImporter->Initialize(filePath.c_str(), -1, lSdkManager->GetIOSettings())) {
-		ERROR("ModelLoader", "LoadFBXModel", "Unable to initialize FBX importer for file: " << filePath.c_str());
-		ERROR("ModelLoader", "LoadFBXModel", "Error returned: " << lImporter->GetStatus().GetErrorString());
-		return false;
-	}
-
-	// 03. Import the scene
-	if (!lImporter->Import(lScene)) {
-		ERROR("ModelLoader", "lImporter->Import", "Unable to import the FBX scene from file : " << filePath.c_str());
-		lImporter->Destroy();
-		return false;
-	}
-
-	// 04. Destroy the importer
-	lImporter->Destroy();
-	MESSAGE("ModelLoader", "LoadFBXModel", "Successfully imported the FBX scene from file: " << filePath.c_str());
-
-	// 05. Process the scene
-	FbxNode* lRootNode = lScene->GetRootNode();
-
-	if (lRootNode) {
-		for (int i = 0; i < lRootNode->GetChildCount(); i++) {
-			ProcessFBXNode(lRootNode->GetChild(i));
+		// 02. Use the first argument as the filename for the importer
+		if (!lImporter->Initialize(filePath.c_str(), -1, lSdkManager->GetIOSettings())) {
+			ERROR("ModelLoader", "LoadFBXModel", "Unable to initialize FBX importer for file: " << filePath.c_str());
+			ERROR("ModelLoader", "LoadFBXModel", "Error returned: " << lImporter->GetStatus().GetErrorString());
+			return false;
 		}
-	}
 
-	// 06. Process the materials
+		// 03. Import the scene
+		if (!lImporter->Import(lScene)) {
+			ERROR("ModelLoader", "lImporter->Import", "Unable to import the FBX scene from file : " << filePath.c_str());
+			lImporter->Destroy();
+			return false;
+		}
+
+		// 04. Destroy the importer
+		lImporter->Destroy();
+		MESSAGE("ModelLoader", "LoadFBXModel", "Successfully imported the FBX scene from file: " << filePath.c_str());
+
+		// 05. Process the scene
+		FbxNode* lRootNode = lScene->GetRootNode();
+
+		if (lRootNode) {
+			for (int i = 0; i < lRootNode->GetChildCount(); i++) {
+				ProcessFBXNode(lRootNode->GetChild(i));
+			}
+		}
+
+		// 06. Process the materials
+		int materialCount = lScene->GetMaterialCount();
+		for (int i = 0; i < materialCount; i++) {
+			FbxSurfaceMaterial* material = lScene->GetMaterial(i);
+			ProcessFBXMaterials(material);
+		}
+  }
+  else {
+    ERROR("ModelLoader", "LoadFBXModel", "Failed to initialize FBX manager.");
+    return false;
+  }
 
 
 
@@ -132,4 +165,21 @@ ModelLoader::ProcessFBXMesh(FbxNode* node) {
 
 	// 06. Add the processed mesh data to the collection.
 	meshes.push_back(meshData);
+}
+
+void
+ModelLoader::ProcessFBXMaterials(FbxSurfaceMaterial* material) {
+	if (material) {
+		FbxProperty prop = material->FindProperty(FbxSurfaceMaterial::sDiffuse);
+		if (prop.IsValid()) {
+			int textureCount = prop.GetSrcObjectCount<FbxTexture>();
+			for (int i = 0; i < textureCount; i++) {
+				FbxTexture* texture = FbxCast<FbxTexture>(prop.GetSrcObject<FbxTexture>(i));
+				if (texture) {
+					textureFileNames.push_back(texture->GetName());
+				}
+			}
+		}
+	}
+
 }

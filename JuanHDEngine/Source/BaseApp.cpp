@@ -71,9 +71,10 @@ BaseApp::init() {
 
 	// Create the Shader Program
 	hr = g_shaderProgram.init(g_device, "JuanHDEngine.fx", Layout);
-
 	if (FAILED(hr))
 		return hr;
+
+  g_Wattson.LoadFBXModel("models/Wattson.fbx");
 
 	// Create vertex buffer
 	SimpleVertex

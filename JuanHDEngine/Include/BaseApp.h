@@ -13,6 +13,7 @@
 #include "Buffer.h"
 #include "MeshComponent.h"
 #include "UI.h"
+#include "ModelLoader.h"
 
 /**
  * @class BaseApp
@@ -120,6 +121,7 @@ public:
   DepthStencilView                    g_depthStencilView; ///< Vista del depth stencil.
   Viewport                            g_viewport;               ///< Viewport de la escena.
   ShaderProgram                       g_shaderProgram;     ///< Programa de shaders.
+  ModelLoader                         g_Wattson;           ///< Cargador de modelos.
 
   // **Buffers de datos**
   Buffer                              g_vertexBuffer;             ///< Buffer de vértices.
