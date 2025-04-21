@@ -84,15 +84,15 @@ UI::Inspector()
 
   // Controles para la posición del cubo
   ImGui::Text("Position");
-  ImGui::DragFloat3("Position", reinterpret_cast<float*>(&g_app.position), 0.1f);
+  ImGui::DragFloat3("Position", reinterpret_cast<float*>(&g_app.AWattson->getComponent<Transform>()->position), 0.1f);
 
   // Controles para la rotación del cubo
   ImGui::Text("Rotation");
-  ImGui::DragFloat3("Rotation", reinterpret_cast<float*>(&g_app.rotation), 0.1f);
+  ImGui::DragFloat3("Rotation", reinterpret_cast<float*>(&g_app.AWattson->getComponent<Transform>()->rotation), 0.1f);
 
   // Controles para la escala del cubo
   ImGui::Text("Scale");
-  ImGui::DragFloat3("Scale", reinterpret_cast<float*>(&g_app.scale), 0.1f);
+  ImGui::DragFloat3("Scale", reinterpret_cast<float*>(&g_app.AWattson->getComponent<Transform>()->scale), 0.1f);
 
   // Termina la ventana
   ImGui::End();

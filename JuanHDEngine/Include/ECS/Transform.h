@@ -70,10 +70,10 @@ public:
     translate(const EngineUtilities::Vector3& translation);
 
 private:
+
+public:
   EngineUtilities::Vector3 position;  // Posición del objeto
   EngineUtilities::Vector3 rotation;  // Rotación del objeto
   EngineUtilities::Vector3 scale;     // Escala del objeto
-
-public:
   XMMATRIX matrix;    // Matriz de transformación
 };
