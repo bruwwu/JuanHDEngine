@@ -14,6 +14,7 @@
 #include "MeshComponent.h"
 #include "UI.h"
 #include "ModelLoader.h"
+#include "ECS\Actor.h"
 
 /**
  * @class BaseApp
@@ -121,7 +122,17 @@ public:
   DepthStencilView                    g_depthStencilView; ///< Vista del depth stencil.
   Viewport                            g_viewport;               ///< Viewport de la escena.
   ShaderProgram                       g_shaderProgram;     ///< Programa de shaders.
-  ModelLoader                         g_Wattson;           ///< Cargador de modelos.
+
+
+  // Wattson Actor
+  ModelLoader													g_Wattson;
+  EngineUtilities::TSharedPointer<Actor> AWattson;
+  std::vector<Texture>								g_WattsonTXT;
+  Texture m_default;
+
+  // Actors
+  std::vector< EngineUtilities::TSharedPointer<Actor>> g_actors;
+
 
   // **Buffers de datos**
   Buffer                              g_vertexBuffer;             ///< Buffer de vértices.
@@ -159,5 +170,5 @@ public:
   bool mouseLeftDown = false;        ///< Estado del botón izquierdo del mouse.
   int lastY;                         ///< Última posición Y del mouse.
   int lastX;                         ///< Última p
-  float sensitivity = 0.1f;          ///< Sensibilidad del mouse. 
+  float sensitivity = 0.005f;          ///< Sensibilidad del mouse. 
 };

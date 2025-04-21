@@ -74,98 +74,6 @@ BaseApp::init() {
 	if (FAILED(hr))
 		return hr;
 
-  g_Wattson.LoadFBXModel("models/Wattson.fbx");
-
-	// Create vertex buffer
-	SimpleVertex
-		vertices[] = {
-				{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
-				{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
-				{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(1.0f, 1.0f) },
-				{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
-
-				{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
-				{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
-				{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT2(1.0f, 1.0f) },
-				{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
-
-				{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT2(0.0f, 0.0f) },
-				{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
-				{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT2(1.0f, 1.0f) },
-				{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
-
-				{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT2(0.0f, 0.0f) },
-				{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
-				{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT2(1.0f, 1.0f) },
-				{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
-
-				{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
-				{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
-				{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT2(1.0f, 1.0f) },
-				{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT2(0.0f, 1.0f) },
-
-				{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT2(0.0f, 0.0f) },
-				{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT2(1.0f, 0.0f) },
-				{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(1.0f, 1.0f) },
-				{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
-	};
-
-	/*D3D11_BUFFER_DESC bd;
-	ZeroMemory(&bd, sizeof(bd));
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(SimpleVertex) * 24;
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.CPUAccessFlags = 0;
-	D3D11_SUBRESOURCE_DATA InitData;
-	ZeroMemory(&InitData, sizeof(InitData));
-	InitData.pSysMem = vertices;
-	hr = g_device.CreateBuffer(&bd, &InitData, &g_pVertexBuffer);
-	if (FAILED(hr))
-		return hr;*/
-
-		// Create vertex buffer
-	unsigned int
-		indices[] = {
-				3,1,0,
-				2,1,3,
-
-				6,4,5,
-				7,4,6,
-
-				11,9,8,
-				10,9,11,
-
-				14,12,13,
-				15,12,14,
-
-				19,17,16,
-				18,17,19,
-
-				22,20,21,
-				23,20,22
-	};
-
-	MeshComponent MC;
-	for (SimpleVertex vertex : vertices) {
-		MC.m_vertex.push_back(vertex);
-	}
-
-	for (unsigned int index : indices) {
-		MC.m_index.push_back(index);
-	}
-
-	MC.m_numVertex = MC.m_vertex.size();
-	MC.m_numIndex = MC.m_index.size();
-
-	hr = g_vertexBuffer.init(g_device, MC, D3D11_BIND_VERTEX_BUFFER);
-
-	if (FAILED(hr))
-		return hr;
-
-	hr = g_indexBuffer.init(g_device, MC, D3D11_BIND_INDEX_BUFFER);
-
-	if (FAILED(hr))
-		return hr;
 
 	// Create the constant buffers
 
@@ -177,78 +85,70 @@ BaseApp::init() {
 	if (FAILED(hr))
 		return hr;
 
-	hr = g_changeEveryFrame.init(g_device, sizeof(CBChangesEveryFrame));
-	if (FAILED(hr))
-		return hr;
 
-	hr = g_textureRV.init(g_device, "seafloor.dds", DDS);
-	if (FAILED(hr))
-		return hr;
-
-	//bd.Usage = D3D11_USAGE_DEFAULT;
-	//bd.ByteWidth = sizeof(WORD) * 36;
-	//bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	//bd.CPUAccessFlags = 0;
-	//InitData.pSysMem = indices;
-	//hr = g_device.CreateBuffer(&bd, &InitData, &g_pIndexBuffer);
-	//if (FAILED(hr))
-	//	return hr;
-
-	//// Create the constant buffers
-	//bd.Usage = D3D11_USAGE_DEFAULT;
-	//bd.ByteWidth = sizeof(CBNeverChanges);
-	//bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	//bd.CPUAccessFlags = 0;
-	//hr = g_device.CreateBuffer(&bd, nullptr, &g_pCBNeverChanges);
-	//if (FAILED(hr))
-	//	return hr;
-
-	//bd.ByteWidth = sizeof(CBChangeOnResize);
-	//hr = g_device.CreateBuffer(&bd, nullptr, &g_pCBChangeOnResize);
-	//if (FAILED(hr))
-	//	return hr;
-
-	//bd.ByteWidth = sizeof(CBChangesEveryFrame);
-	//hr = g_device.CreateBuffer(&bd, nullptr, &g_pCBChangesEveryFrame);
-	//if (FAILED(hr))
-	//	return hr;
-
-	//// Load the Texture
-	/*hr = D3DX11CreateShaderResourceViewFromFile(g_device.m_device, "seafloor.dds", nullptr, nullptr, &g_TextureRV, nullptr);*/
-
-
-
-	//// Create the sample state
-	//D3D11_SAMPLER_DESC sampDesc;
-	//ZeroMemory(&sampDesc, sizeof(sampDesc));
-	//sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	//sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	//sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	//sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	//sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-	//sampDesc.MinLOD = 0;
-	//sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-	//hr = g_device.CreateSamplerState(&sampDesc, &g_pSamplerLinear);
-	//if (FAILED(hr))
-	//	return hr;
-	/*Se movió esta partecita al SamplerState, que pro*/
-	g_ui.init(g_window.m_hWnd, g_device.m_device, g_deviceContext.m_deviceContext);
-
-	// Initialize the world matrices
-	g_modelMatrix = XMMatrixIdentity();
-
-	//Escala del objeto, 
-  scale.x = 1.0f;
-  scale.y = 1.0f;
-  scale.z = 1.0f;
-
- 
 
 	// Initialize the view matrix
 	XMVECTOR Eye = XMVectorSet(0.0f, 3.0f, -6.0f, 0.0f);
 	XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
   XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	g_View = XMMatrixLookAtLH(Eye, At, Up);
+
+  g_ui.init(g_window.m_hWnd, g_device.m_device, g_deviceContext.m_deviceContext);
+	// Set Wattson Actor
+	AWattson = EngineUtilities::MakeShared<Actor>(g_device);
+	if (!AWattson.isNull()) {
+		// Init Actor Transform
+		AWattson->getComponent<Transform>()->setTransform(EngineUtilities::Vector3(-0.9f, -2.0f, 2.0f),
+			EngineUtilities::Vector3(XM_PI / -2.0f, 0.0f, XM_PI / 2.0f),
+			EngineUtilities::Vector3(0.03f, 0.03f, 0.03f));
+
+		// Load Model
+		g_Wattson.LoadFBXModel("models/Wattson.fbx");
+
+		// Init Actor Mesh
+		AWattson->setMesh(g_device, g_Wattson.meshes);
+
+		// Set Actor Name
+		AWattson->setName(g_Wattson.modelName);
+
+
+		std::vector<Texture> wattsonTextures;
+		Texture Wattson_Face;
+		Wattson_Face.init(g_device, "Textures/Face_D.png", ExtensionType::PNG);
+
+    Texture Wattson_Clothes;
+    Wattson_Clothes.init(g_device, "Textures/Jacket_D.png", ExtensionType::PNG);
+
+		Texture Wattson_Gear;
+    Wattson_Gear.init(g_device, "Textures/Gear_D.png", ExtensionType::PNG);
+
+    Texture Wattson_Hair;
+    Wattson_Hair.init(g_device, "Textures/Hair_D.png", ExtensionType::PNG);
+
+    Texture Wattson_JumpKit;
+    Wattson_JumpKit.init(g_device, "Textures/Jumpkit_D.png", ExtensionType::PNG);
+
+    Texture Wattson_Suit;
+    Wattson_Suit.init(g_device, "Textures/Suit_D.png", ExtensionType::PNG);
+
+
+		g_WattsonTXT.reserve(7);
+		g_WattsonTXT.push_back(Wattson_Suit);
+		g_WattsonTXT.push_back(Wattson_Gear);
+		g_WattsonTXT.push_back(Wattson_Clothes);
+		g_WattsonTXT.push_back(Wattson_Gear);
+		g_WattsonTXT.push_back(Wattson_JumpKit);
+		g_WattsonTXT.push_back(Wattson_Face);
+		g_WattsonTXT.push_back(Wattson_Hair);
+    // Set Actor Textures
+    AWattson->setTextures(g_WattsonTXT);
+		std::string msg = AWattson->getName() + " - Actor accessed successfully.";
+		MESSAGE("Actor", "Actor", msg.c_str());
+	}
+	else {
+		MESSAGE("Actor", "Actor", "Actor resource not found.");
+	}
+
 	return S_OK;
 }
 
@@ -256,8 +156,8 @@ BaseApp::init() {
 
 void
 BaseApp::update() {
-	// Actualizar tiempo y rotaci�n
 	g_ui.update();
+	// Actualizar tiempo y rotación
 	static float t = 0.0f;
 	if (g_swapchain.m_driverType == D3D_DRIVER_TYPE_REFERENCE) {
 		t += (float)XM_PI * 0.0125f;
@@ -269,60 +169,23 @@ BaseApp::update() {
 			dwTimeStart = dwTimeCur;
 		t = (dwTimeCur - dwTimeStart) / 1000.0f;
 	}
-
- 
-
-  // Renderizar UI
-  g_ui.Inspector();
-  g_ui.renderWindow();
+	// Renderizar UI
+	g_ui.Inspector();
+	g_ui.renderWindow();
 	updateTransalationbyKeys(t);
-	
-
-	// Actualizar la rotaci�n del objeto y el color
-	g_modelMatrix = XMMatrixRotationY(t);
-	g_vMeshColor = XMFLOAT4(
-		(sinf(t * 1.0f) + 1.0f) * 0.5f,
-		(cosf(t * 3.0f) + 1.0f) * 0.5f,
-		(sinf(t * 5.0f) + 1.0f) * 0.5f,
-		1.0f
-	);
-
-	//Rotacion del objeto
-	rotation.y = t;
-
-  XMMATRIX scaleMatrix = XMMatrixScaling(scale.x, scale.y, scale.z);
-  XMMATRIX rotationMatrix = XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, rotation.z);
-  XMMATRIX translationMatrix = XMMatrixTranslation(position.x, position.y, position.z);
-
-	g_modelMatrix = scaleMatrix * rotationMatrix * translationMatrix;
-
-	// Actualizar el buffer constante del frame
-	cb.mWorld = XMMatrixTranspose(g_modelMatrix);
-	g_vMeshColor = XMFLOAT4(
-		(sinf(t * 1.0f) + 1.0f) * 0.5f,
-		(cosf(t * 3.0f) + 1.0f) * 0.5f,
-		(sinf(t * 5.0f) + 1.0f) * 0.5f,
-		1.0f
-	);
-	cb.vMeshColor = g_vMeshColor;
-
-
-	//g_deviceContext.UpdateSubresource(g_pCBChangesEveryFrame, 0, nullptr, &cb, 0, 0);
-	g_changeEveryFrame.update(g_deviceContext, 0, nullptr, &cb, 0, 0);
 
 	// Actualizar la matriz de proyecci�n
 	float FOV = XMConvertToRadians(90.0F);
 	g_Projection = XMMatrixPerspectiveFovLH(FOV, g_window.m_width / (float)g_window.m_height, 0.01f, 10000.0f);
 
 	updateCamera();
-	// Actualizar la proyecci�n en el buffer constante
+	// Actualizar la proyección en el buffer constante
 	cbChangesOnResize.mProjection = XMMatrixTranspose(g_Projection);
-	//g_deviceContext.UpdateSubresource(g_pCBChangeOnResize, 0, nullptr, &cbChangesOnResize, 0, 0);
 	g_changeOnResize.update(g_deviceContext, 0, nullptr, &cbChangesOnResize, 0, 0);
 
-	/*Nota
-	Se arregló el error con el renderizado del cubito kawaii, el problema fue por tener un g_neverChanges
-	en donde no era, todo bobomensotonto*/
+	// Actualizar info logica del mesh
+	AWattson->update(0, g_deviceContext);
+
 }
 
 void
@@ -399,57 +262,50 @@ void BaseApp::rotateCamera(int mouseX, int mouseY)
 
 void
 BaseApp::render() {
-	// Limpiar los buffers
-	const float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
-
-	// Set Render Target View
-	g_renderTargetView.render(g_deviceContext, g_depthStencilView, 1, ClearColor);
+	// Clear the back buffer
+	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
 
 	// Set Viewport
 	g_viewport.render(g_deviceContext);
 
+	// Set Render Target View
+	g_renderTargetView.render(g_deviceContext, g_depthStencilView, 1, ClearColor);
+
 	// Set Depth Stencil View
 	g_depthStencilView.render(g_deviceContext);
 
-	// Configurar los buffers y shaders para el pipeline
+	// Render the cube
 	g_shaderProgram.render(g_deviceContext);
 
-	g_vertexBuffer.render(g_deviceContext, 0, 1);
-	g_indexBuffer.render(g_deviceContext, 0, 1, false, DXGI_FORMAT_R32_UINT);
-	g_deviceContext.IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	// Render the models
+	AWattson->render(g_deviceContext);
+	//Awebitos->render(m_deviceContext);
 
-	// Asignar shaders y buffers constantes
-	// Renderizar buffers constantes en el Vertex Shader
+	// Set Constant Buffers and asign Shaders
 	g_neverChanges.render(g_deviceContext, 0, 1);
 	g_changeOnResize.render(g_deviceContext, 1, 1);
-	g_changeEveryFrame.render(g_deviceContext, 2, 1);
 
-	// Renderizar buffers constantes en el Pixel Shader (si aplica)
-	g_changeEveryFrame.render(g_deviceContext, 2, 1, true);
+	// Drawing
+	//m_deviceContext.DrawIndexed(MC.m_index.size(), 0, 0);
 
-	g_textureRV.render(g_deviceContext, 0, 1);
-	g_deviceContext.PSSetSamplers(0, 1, &g_pSamplerLinear);
-
-	// Dibujar
-	g_deviceContext.DrawIndexed(36, 0, 0);
-
+	// Render the UI
   g_ui.render();
-	// Presentar el frame en pantalla
+
+	// Present our back buffer to our front buffer
 	g_swapchain.present();
 }
 
 void
 BaseApp::destroy() {
 	if (g_deviceContext.m_deviceContext) g_deviceContext.m_deviceContext->ClearState();
+  AWattson->destroy();
 
-	if (g_pSamplerLinear) g_pSamplerLinear->Release();
-
-	g_textureRV.destroy();
+	//g_textureRV.destroy();
 	g_neverChanges.destroy();
 	g_changeOnResize.destroy();
-	g_changeEveryFrame.destroy();
-	g_vertexBuffer.destroy();
-	g_indexBuffer.destroy();
+	//g_changeEveryFrame.destroy();
+	//g_vertexBuffer.destroy();
+	//g_indexBuffer.destroy();
 	g_shaderProgram.destroy();
 
   g_ui.destroy();

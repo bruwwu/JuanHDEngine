@@ -27,226 +27,99 @@
  * SOFTWARE.
 */
 #pragma once
-namespace EngineUtilities {
-  /**
- * @brief A 4x4 matrix class.
- *
- * This class represents a 4x4 matrix and provides basic matrix operations such as
- * addition, subtraction, multiplication, determinant calculation, and inversion.
- */
-  class Matrix4x4 {
-  public:
-    float m[4][4]; /**< The elements of the matrix. */
 
-    // Default constructor initializes to identity matrix
-    Matrix4x4() {
-      for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-          m[i][j] = (i == j) ? 1.0f : 0.0f;
-        }
-      }
-    }
+#include "Utilities/Utilities/EngineMath.h"
+namespace
+  EngineUtilities {
+  /**
+ * @brief A 4D vector class.
+ *
+ * This class represents a vector in 4-dimensional space and provides
+ * basic vector operations such as addition, subtraction, scalar multiplication,
+ * and normalization.
+ */
+  class
+    Vector4 {
+  public:
+    float x; /**< The x-coordinate of the vector. */
+    float y; /**< The y-coordinate of the vector. */
+    float z; /**< The z-coordinate of the vector. */
+    float w; /**< The w-coordinate of the vector. */
 
     /**
      * @brief Default constructor.
      *
-     * Initializes the matrix to the identity matrix.
+     * Initializes the vector to (0, 0, 0, 0).
      */
-    Matrix4x4() {
-      m[0][0] = 1; m[0][1] = 0; m[0][2] = 0; m[0][3] = 0;
-      m[1][0] = 0; m[1][1] = 1; m[1][2] = 0; m[1][3] = 0;
-      m[2][0] = 0; m[2][1] = 0; m[2][2] = 1; m[2][3] = 0;
-      m[3][0] = 0; m[3][1] = 0; m[3][2] = 0; m[3][3] = 1;
-    }
-
+    Vector4() : x(0), y(0), z(0), w(0) {}
 
     /**
      * @brief Parameterized constructor.
      *
-     * Initializes the matrix with the given values.
+     * Initializes the vector to the given x, y, z, and w values.
      *
-     * @param a11 Element at row 1, column 1.
-     * @param a12 Element at row 1, column 2.
-     * @param a13 Element at row 1, column 3.
-     * @param a14 Element at row 1, column 4.
-     * @param a21 Element at row 2, column 1.
-     * @param a22 Element at row 2, column 2.
-     * @param a23 Element at row 2, column 3.
-     * @param a24 Element at row 2, column 4.
-     * @param a31 Element at row 3, column 1.
-     * @param a32 Element at row 3, column 2.
-     * @param a33 Element at row 3, column 3.
-     * @param a34 Element at row 3, column 4.
-     * @param a41 Element at row 4, column 1.
-     * @param a42 Element at row 4, column 2.
-     * @param a43 Element at row 4, column 3.
-     * @param a44 Element at row 4, column 4.
+     * @param x The x-coordinate.
+     * @param y The y-coordinate.
+     * @param z The z-coordinate.
+     * @param w The w-coordinate.
      */
-    Matrix4x4(float a11, float a12, float a13, float a14,
-      float a21, float a22, float a23, float a24,
-      float a31, float a32, float a33, float a34,
-      float a41, float a42, float a43, float a44) {
-      m[0][0] = a11; m[0][1] = a12; m[0][2] = a13; m[0][3] = a14;
-      m[1][0] = a21; m[1][1] = a22; m[1][2] = a23; m[1][3] = a24;
-      m[2][0] = a31; m[2][1] = a32; m[2][2] = a33; m[2][3] = a34;
-      m[3][0] = a41; m[3][1] = a42; m[3][2] = a43; m[3][3] = a44;
-    }
-
-    // Copy constructor
-    Matrix4x4(const Matrix4x4& other) {
-      for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-          m[i][j] = other.m[i][j];
-        }
-      }
-    }
+    Vector4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {}
 
     /**
-     * @brief Adds another matrix to this matrix.
+     * @brief Adds another vector to this vector.
      *
-     * @param other The matrix to add.
+     * @param other The vector to add.
      * @return The result of the addition.
      */
-    Matrix4x4 operator+(const Matrix4x4& other) const {
-      return Matrix4x4(
-        m[0][0] + other.m[0][0], m[0][1] + other.m[0][1], m[0][2] + other.m[0][2], m[0][3] + other.m[0][3],
-        m[1][0] + other.m[1][0], m[1][1] + other.m[1][1], m[1][2] + other.m[1][2], m[1][3] + other.m[1][3],
-        m[2][0] + other.m[2][0], m[2][1] + other.m[2][1], m[2][2] + other.m[2][2], m[2][3] + other.m[2][3],
-        m[3][0] + other.m[3][0], m[3][1] + other.m[3][1], m[3][2] + other.m[3][2], m[3][3] + other.m[3][3]
-      );
+    Vector4
+      operator+(const Vector4& other) const {
+      return Vector4(x + other.x, y + other.y, z + other.z, w + other.w);
     }
 
     /**
-     * @brief Subtracts another matrix from this matrix.
+     * @brief Subtracts another vector from this vector.
      *
-     * @param other The matrix to subtract.
+     * @param other The vector to subtract.
      * @return The result of the subtraction.
      */
-    Matrix4x4 operator-(const Matrix4x4& other) const {
-      return Matrix4x4(
-        m[0][0] - other.m[0][0], m[0][1] - other.m[0][1], m[0][2] - other.m[0][2], m[0][3] - other.m[0][3],
-        m[1][0] - other.m[1][0], m[1][1] - other.m[1][1], m[1][2] - other.m[1][2], m[1][3] - other.m[1][3],
-        m[2][0] - other.m[2][0], m[2][1] - other.m[2][1], m[2][2] - other.m[2][2], m[2][3] - other.m[2][3],
-        m[3][0] - other.m[3][0], m[3][1] - other.m[3][1], m[3][2] - other.m[3][2], m[3][3] - other.m[3][3]
-      );
+    Vector4
+      operator-(const Vector4& other) const {
+      return Vector4(x - other.x, y - other.y, z - other.z, w - other.w);
     }
 
     /**
-     * @brief Multiplies this matrix by another matrix.
+     * @brief Multiplies this vector by a scalar.
      *
-     * @param other The matrix to multiply by.
+     * @param scalar The scalar to multiply by.
      * @return The result of the multiplication.
      */
-    Matrix4x4 operator*(const Matrix4x4& other) const {
-      return Matrix4x4(
-        m[0][0] * other.m[0][0] + m[0][1] * other.m[1][0] + m[0][2] * other.m[2][0] + m[0][3] * other.m[3][0],
-        m[0][0] * other.m[0][1] + m[0][1] * other.m[1][1] + m[0][2] * other.m[2][1] + m[0][3] * other.m[3][1],
-        m[0][0] * other.m[0][2] + m[0][1] * other.m[1][2] + m[0][2] * other.m[2][2] + m[0][3] * other.m[3][2],
-        m[0][0] * other.m[0][3] + m[0][1] * other.m[1][3] + m[0][2] * other.m[2][3] + m[0][3] * other.m[3][3],
-
-        m[1][0] * other.m[0][0] + m[1][1] * other.m[1][0] + m[1][2] * other.m[2][0] + m[1][3] * other.m[3][0],
-        m[1][0] * other.m[0][1] + m[1][1] * other.m[1][1] + m[1][2] * other.m[2][1] + m[1][3] * other.m[3][1],
-        m[1][0] * other.m[0][2] + m[1][1] * other.m[1][2] + m[1][2] * other.m[2][2] + m[1][3] * other.m[3][2],
-        m[1][0] * other.m[0][3] + m[1][1] * other.m[1][3] + m[1][2] * other.m[2][3] + m[1][3] * other.m[3][3],
-
-        m[2][0] * other.m[0][0] + m[2][1] * other.m[1][0] + m[2][2] * other.m[2][0] + m[2][3] * other.m[3][0],
-        m[2][0] * other.m[0][1] + m[2][1] * other.m[1][1] + m[2][2] * other.m[2][1] + m[2][3] * other.m[3][1],
-        m[2][0] * other.m[0][2] + m[2][1] * other.m[1][2] + m[2][2] * other.m[2][2] + m[2][3] * other.m[3][2],
-        m[2][0] * other.m[0][3] + m[2][1] * other.m[1][3] + m[2][2] * other.m[2][3] + m[2][3] * other.m[3][3],
-
-        m[3][0] * other.m[0][0] + m[3][1] * other.m[1][0] + m[3][2] * other.m[2][0] + m[3][3] * other.m[3][0],
-        m[3][0] * other.m[0][1] + m[3][1] * other.m[1][1] + m[3][2] * other.m[2][1] + m[3][3] * other.m[3][1],
-        m[3][0] * other.m[0][2] + m[3][1] * other.m[1][2] + m[3][2] * other.m[2][2] + m[3][3] * other.m[3][2],
-        m[3][0] * other.m[0][3] + m[3][1] * other.m[1][3] + m[3][2] * other.m[2][3] + m[3][3] * other.m[3][3]
-      );
+    Vector4
+      operator*(float scalar) const {
+      return Vector4(x * scalar, y * scalar, z * scalar, w * scalar);
     }
 
     /**
-     * @brief Computes the determinant of the matrix.
+     * @brief Calculates the magnitude (length) of the vector.
      *
-     * @return The determinant of the matrix.
+     * @return The magnitude of the vector.
      */
-    float determinant() const {
-      return
-        m[0][0] * (
-          m[1][1] * (m[2][2] * m[3][3] - m[2][3] * m[3][2]) -
-          m[1][2] * (m[2][1] * m[3][3] - m[2][3] * m[3][1]) +
-          m[1][3] * (m[2][1] * m[3][2] - m[2][2] * m[3][1])
-          ) -
-        m[0][1] * (
-          m[1][0] * (m[2][2] * m[3][3] - m[2][3] * m[3][2]) -
-          m[1][2] * (m[2][0] * m[3][3] - m[2][3] * m[3][0]) +
-          m[1][3] * (m[2][0] * m[3][2] - m[2][2] * m[3][0])
-          ) +
-        m[0][2] * (
-          m[1][0] * (m[2][1] * m[3][3] - m[2][3] * m[3][1]) -
-          m[1][1] * (m[2][0] * m[3][3] - m[2][3] * m[3][0]) +
-          m[1][3] * (m[2][0] * m[3][1] - m[2][1] * m[3][0])
-          ) -
-        m[0][3] * (
-          m[1][0] * (m[2][1] * m[3][2] - m[2][2] * m[3][1]) -
-          m[1][1] * (m[2][0] * m[3][2] - m[2][2] * m[3][0]) +
-          m[1][2] * (m[2][0] * m[3][1] - m[2][1] * m[3][0])
-          );
+    float
+      magnitude() const {
+      return EngineUtilities::sqrt(x * x + y * y + z * z + w * w);
     }
 
     /**
-     * @brief Computes the inverse of the matrix.
+     * @brief Normalizes the vector.
      *
-     * @return The inverse of the matrix.
+     * @return The normalized vector.
      */
-    
-    //Matrix4x4 inverse() const {
-    //  float det = determinant();
-    //  if (det == 0) {
-    //    // Return identity matrix for simplicity when the matrix is singular.
-    //    return Matrix4x4();
-    //  }
-
-    //  float invDet = 1.0f / det;
-
-    //  return Matrix4x4(
-    //    (m[1][1] * (m[2][2] * m[3][3] - m[2][3] * m[3][2]) -
-    //      m[1][2] * (m[2][1] * m[3][3] - m[2][3] * m[3][1]) +
-    //      m[1][3] * (m[2][1] * m[3][2] - m[2][2] * m[3][1])) * invDet,
-    //    -(m[0][1] * (m[2][2] * m[3][3] - m[2][3] * m[3][2]) -
-    //      m[0][2] * (m[2][1] * m[3][3] - m[2][3] * m[3][1]) +
-    //      m[0][3] * (m[2][1] * m[3][2] - m[2][2] * m[3][1])) * invDet,
-    //    (m[0][1] * (m[1][2] * m[3][3] - m[1][3] * m[3][2]) -
-    //      m[0][2] * (m[1][1] * m[3][3] - m[1][3] * m[3][1]) +
-    //      m[0][3] * (m[1][1] * m[3][2] - m[1][2] * m[3][1])) * invDet,
-    //    -(m[0][1] * (m[1][2] * m[2][3] - m[1][3] * m[2][2]) -
-    //      m[0][2] * (m[1][1] * m[2][3] - m[1][3] * m[2][1]) +
-    //      m[0][3] * (m[1][1] * m[2][2] - m[1][2] * m[2][1])) * invDet,
-
-    //    -(m[1][0] * (m[2][2] * m[3][3] - m[2][3] * m[3][2]) -
-    //      m[1][2] * (m[2][0] * m[3][3] - m[2][3] * m[3][0]) +
-    //      m[1][3] * (m[2][0] * m[3][2] - m[2][2] * m[3][0])) * invDet,
-    //    (m[0][0] * (m[2][2] * m[3][3] - m[2][3] * m[3][2]) -
-    //      m[0][2] * (m[2][0] * m[3][3] - m[2][3] * m[3][0]) +
-    //      m[0][3] * (m[2][0] * m[3][2] - m[2][2] * m[3][0])) * invDet,
-    //    -(m[0][0] * (m[1][2] * m[3][3] - m[1][3] * m[3][2]) -
-    //      m[0][2] * (m[1][0] * m[3][3] - m[1][3] * m[3][0]) +
-    //      m[0][3] * (m[1][0] * m[3][2] - m[1][2] * m[3][0])) * invDet,
-    //    (m[0][0] * (m[1][2] * m[2][3] - m[1][3] * m[2][2]) -
-    //      m[0][2] * (m[1][0] * m[2][3] - m[1][3] * m[2][0]) +
-    //      m[0][3] * (m[1][0] * m[2][2] - m[1][2] * m[2][0])) * invDet,
-
-    //    (m[1][0] * (m[2][1] * m[3][3] - m[2][3] * m[3][1]) -
-    //      m[1][1] * (m[2][0] * m[3][3] - m[2][3] * m[3][0]) +
-    //      m[1][3] * (m[2][0] * m[3][1] - m[2][1] * m[3][0])) * invDet,
-    //    -(m[0][0] * (m[2][1] * m[3][3] - m[2][3] * m[3][1]) -
-    //      m[0][1] * (m[2][0] * m[3][3] - m[2][3] * m[3][0]) +
-    //      m[0][3] * (m[2][0] * m[3][1] - m[2][1] * m[3][0])) * invDet,
-    //    (m[0][0] * (m[1][1] * m[3][3] - m[1][3] * m[3][1]) -
-    //      m[0][1] * (m[1][0] * m[3][3] - m[1][3] * m[3][0]) +
-    //      m[0][3] * (m[1][0] * m[3][1] - m[1][1] * m[3][0])) * invDet,
-    //    -(m[0][0] * (m[1][1] * m[2][3] - m[1][3] * m[2][1]) -
-    //      m[0][1] * (m[1][0] * m[2][3] - m[1][3] * m[2][0]) +
-    //      m[0][3] * (m[1][0] * m[2][1] - m[1][1] * m[2][0])) * invDet
-    //  );
-    //}
-
-
+    Vector4
+      normalize() const {
+      float mag = magnitude();
+      if (mag == 0) {
+        return Vector4(0, 0, 0, 0);
+      }
+      return Vector4(x / mag, y / mag, z / mag, w / mag);
+    }
   };
 }

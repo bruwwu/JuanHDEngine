@@ -22,10 +22,10 @@
 #include "imgui_impl_win32.h"
 
 // EngineUtilities
-#include "Utilities\Memory/TSharedPointer.h"
-#include "Utilities\Memory/TStaticPtr.h"
-#include "Utilities\Memory/TWeakPointer.h"
-#include "Utilities\Memory\TUniquePtr.h"
+#include "Utilities/Memory/TSharedPointer.h"
+#include "Utilities/Memory/TStaticPtr.h"
+#include "Utilities/Memory/TWeakPointer.h"
+#include "Utilities/Memory/TUniquePtr.h"
 
 //Mathmamadams
 #include "Utilities\Vectors\Vector3.h"
@@ -80,11 +80,12 @@
     * @enum ComponentType
     * @brief Define los tipos de componentes disponibles en la escena.
     */
-enum ComponentType {
-  NONE = 0,      ///< Tipo de componente no especificado.
-  TRANSFORM = 1, ///< Componente de transformación.
-  MESH = 2,      ///< Componente de malla.
-  MATERIAL = 3   ///< Componente de material.
+enum
+  ComponentType {
+  NONE = 0,     ///< Tipo de componente no especificado.
+  TRANSFORM = 1,///< Componente de transformación.
+  MESH = 2,     ///< Componente de malla.
+  MATERIAL = 3  ///< Componente de material.
 };
 
 // **Estructura de la Cámara**

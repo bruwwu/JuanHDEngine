@@ -48,6 +48,9 @@
     <Filter Include="Include\ECS">
       <UniqueIdentifier>{6194c11d-52d6-4292-aeee-f0251d599eeb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\ECS">
+      <UniqueIdentifier>{ce19fbbd-5401-44af-af02-6982808ca6b3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\BaseApp.h">
@@ -179,10 +182,16 @@
     <ClInclude Include="Include\Utilities\Utilities\EngineMath.h">
       <Filter>Utilities\Util</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Entity.h">
+    <ClInclude Include="Include\ECS\Transform.h">
       <Filter>Include\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Component.h">
+    <ClInclude Include="Include\ECS\Actor.h">
+      <Filter>Include\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ECS\Component.h">
+      <Filter>Include\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ECS\Entity.h">
       <Filter>Include\ECS</Filter>
     </ClInclude>
   </ItemGroup>
@@ -253,6 +262,12 @@
     </ClCompile>
     <ClCompile Include="Source\ModelLoader.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ECS\Actor.cpp">
+      <Filter>Source\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ECS\Transform.cpp">
+      <Filter>Source\ECS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
