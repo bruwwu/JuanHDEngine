@@ -171,3 +171,11 @@ enum ShaderType {
   VERTEX_SHADER = 0, ///< Shader de vértices.
   PIXEL_SHADER = 1   ///< Shader de píxeles.
 };
+
+struct LoadDataOBJ {
+  std::string name; ///< Nombre del objeto.
+  std::vector<SimpleVertex> vertex; ///< Vértices del objeto.
+  std::vector<unsigned int> index; ///< Índices de los vértices.
+  int numVertex = 0; ///< Número de vértices.
+  int numIndex = 0; ///< Número de índices.
+};

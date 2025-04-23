@@ -1,4 +1,5 @@
 #include "ModelLoader.h"
+#include "obj\OBJ_Loader.h"
 
 bool
 ModelLoader::InitializeFBXManager() {
@@ -22,7 +23,7 @@ ModelLoader::InitializeFBXManager() {
 }
 
 bool
-ModelLoader::LoadFBXModel(const std::string& filePath) {
+	ModelLoader::LoadFBXModel(const std::string& filePath) {
   //0	Initialize FBX Manager
 	if (InitializeFBXManager()) {
 		// 01. Create an importer using the SDK manager
@@ -73,7 +74,7 @@ ModelLoader::LoadFBXModel(const std::string& filePath) {
 }
 
 void
-ModelLoader::ProcessFBXNode(FbxNode* node) {
+	ModelLoader::ProcessFBXNode(FbxNode* node) {
 	// 01. Process all the node's meshes
 	if (node->GetNodeAttribute()) {
 		if (node->GetNodeAttribute()->GetAttributeType() == FbxNodeAttribute::eMesh) {
@@ -88,7 +89,7 @@ ModelLoader::ProcessFBXNode(FbxNode* node) {
 }
 
 void
-ModelLoader::ProcessFBXMesh(FbxNode* node) {
+	ModelLoader::ProcessFBXMesh(FbxNode* node) {
 	// 01. Get the mesh from the node. If there is no mesh, exit early.
 	FbxMesh* mesh = node->GetMesh();
 	if (!mesh) return;
@@ -167,6 +168,49 @@ ModelLoader::ProcessFBXMesh(FbxNode* node) {
 	meshes.push_back(meshData);
 }
 
+bool 
+	ModelLoader::LoadOBJ_model(const std::string& filePath) {
+	// 0) limpiar y registrar nombre
+	meshes.clear();
+
+	// 1) intentar carga
+	objl::Loader loader;
+	if (!loader.LoadFile(filePath)) {
+		ERROR("ModelLoader", "LoadOBJ_model", "No se pudo cargar OBJ: ");
+		return false;
+	}
+	MESSAGE("ModelLoader", "LoadOBJ_model", "OBJ cargado: ");
+
+	// 2) procesar cada LoadedMesh
+	for (auto const& objMesh : loader.LoadedMeshes) {
+		MeshComponent meshData;
+		meshData.m_name = objMesh.MeshName;
+
+		meshData.m_vertex.reserve(objMesh.Vertices.size());
+		for (auto const& v : objMesh.Vertices) {
+			SimpleVertex sv;
+			sv.Pos = { v.Position.X, v.Position.Y, v.Position.Z };
+			sv.Tex = { v.TextureCoordinate.X, -v.TextureCoordinate.Y };
+			meshData.m_vertex.push_back(sv);
+		}
+
+		meshData.m_index = objMesh.Indices;
+		meshData.m_numVertex = (int)meshData.m_vertex.size();
+		meshData.m_numIndex = (int)meshData.m_index.size();
+		meshes.push_back(std::move(meshData));
+
+		MESSAGE("ModelLoader", "LoadOBJ_model", "Submesh OBJ: ");
+	}
+
+	// 3) verificar que se procesó al menos una sub-malla
+	if (meshes.empty()) {
+		ERROR("ModelLoader", "LoadOBJ_model", "No se encontraron sub-mallas en OBJ: ");
+		return false;
+	}
+
+	return true;
+}
+
 void
 ModelLoader::ProcessFBXMaterials(FbxSurfaceMaterial* material) {
 	if (material) {
@@ -181,5 +225,4 @@ ModelLoader::ProcessFBXMaterials(FbxSurfaceMaterial* material) {
 			}
 		}
 	}
-
 }

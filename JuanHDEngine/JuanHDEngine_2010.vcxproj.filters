@@ -194,6 +194,9 @@
     <ClInclude Include="Include\ECS\Entity.h">
       <Filter>Include\ECS</Filter>
     </ClInclude>
+    <ClInclude Include="Include\obj\OBJ_Loader.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="JuanHDEngine.cpp" />

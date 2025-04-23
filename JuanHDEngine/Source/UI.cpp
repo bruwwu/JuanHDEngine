@@ -69,71 +69,95 @@ UI::destroy()
   ImGui::DestroyContext();
 }
 
-void
-UI::renderWindow() {
-  ImGui::Begin("yonesi de fortnite");
-  ImGui::Text("Inserte Textura");
-  ImGui::End();
-}
-
-void 
-UI::Inspector()
+void UI::Inspector()
 {
-  // Crea una nueva ventana
-  ImGui::Begin("Cube Transform");
+    static int selectedActorIndex = -1; // Índice del actor seleccionado
 
-  // Controles para la posición del cubo
-  ImGui::Text("Position");
-  ImGui::DragFloat3("Position", reinterpret_cast<float*>(&g_app.AWattson->getComponent<Transform>()->position), 0.1f);
+    ImGui::Begin("Actor Inspector");
 
-  // Controles para la rotación del cubo
-  ImGui::Text("Rotation");
-  ImGui::DragFloat3("Rotation", reinterpret_cast<float*>(&g_app.AWattson->getComponent<Transform>()->rotation), 0.1f);
+    // — Lista jerárquica de actores —
+    ImGui::Text("Actors in Scene:");
+    for (int i = 0; i < (int)g_app.g_actors.size(); ++i) {
+        auto& actor = g_app.g_actors[i];
+        if (!actor) continue;
+        bool isSelected = (selectedActorIndex == i);
+        // Visible label: actor name; Internal ID: "##Actor_i"
+        std::string label = actor->getName() + "##Actor_" + std::to_string(i);
+        if (ImGui::Selectable(label.c_str(), isSelected)) {
+            selectedActorIndex = i;
+        }
+    }
 
-  // Controles para la escala del cubo
-  ImGui::Text("Scale");
-  ImGui::DragFloat3("Scale", reinterpret_cast<float*>(&g_app.AWattson->getComponent<Transform>()->scale), 0.1f);
+    ImGui::Separator();
 
-  // Termina la ventana
-  ImGui::End();
+    // — Inspector de transform del actor seleccionado —
+    if (selectedActorIndex >= 0 && selectedActorIndex < (int)g_app.g_actors.size()) {
+        auto& actor     = g_app.g_actors[selectedActorIndex];
+        auto  transform = actor->getComponent<Transform>();
+        if (transform) {
+            ImGui::Text("Transform for %s", actor->getName().c_str());
+
+            // Preparamos un buffer para las etiquetas con ID único
+            char buf[64];
+
+            // Position
+            sprintf(buf, "Position##pos_%d", selectedActorIndex);
+            ImGui::DragFloat3(buf, &transform->position.x, 0.1f);
+
+            // Rotation
+            sprintf(buf, "Rotation##rot_%d", selectedActorIndex);
+            ImGui::DragFloat3(buf, &transform->rotation.x, 0.1f);
+
+            // Scale
+            sprintf(buf, "Scale##scl_%d", selectedActorIndex);
+            ImGui::DragFloat3(buf, &transform->scale.x,    0.1f);
+        }
+        else {
+            ImGui::TextColored(ImVec4(1,0,0,1), "No Transform component!");
+        }
+    }
+
+    ImGui::End();
 }
 
-void
-UI::baseStyleGUI() {
+
+
+void UI::baseStyleGUI() {
   ImGuiStyle& style = ImGui::GetStyle();
   ImVec4* colors = style.Colors;
 
-  colors[ImGuiCol_Text] = ImVec4(0.80f, 0.70f, 0.60f, 1.00f);            // Color de texto (beige oscuro)
-  colors[ImGuiCol_WindowBg] = ImVec4(0.20f, 0.15f, 0.10f, 1.00f);        // Fondo de ventana (marrón muy oscuro)
-  colors[ImGuiCol_Button] = ImVec4(0.40f, 0.25f, 0.15f, 1.00f);          // Botones (marrón oscuro)
-  colors[ImGuiCol_ButtonHovered] = ImVec4(0.55f, 0.35f, 0.20f, 1.00f);   // Botones al pasar el mouse (marrón menos oscuro)
-  colors[ImGuiCol_ButtonActive] = ImVec4(0.60f, 0.30f, 0.20f, 1.00f);    // Botones activos (marrón rojizo oscuro)
-  colors[ImGuiCol_FrameBg] = ImVec4(0.25f, 0.15f, 0.10f, 1.00f);         // Fondo de los frames (marrón muy oscuro)
-  colors[ImGuiCol_FrameBgHovered] = ImVec4(0.35f, 0.20f, 0.15f, 1.00f);  // Fondo de los frames con hover (más claro)
-  colors[ImGuiCol_TitleBg] = ImVec4(0.35f, 0.20f, 0.10f, 1.00f);         // Fondo del título (marrón oscuro)
-  colors[ImGuiCol_TitleBgActive] = ImVec4(0.45f, 0.30f, 0.15f, 1.00f);   // Fondo del título activo (marrón menos oscuro)
+  colors[ImGuiCol_Text] = ImVec4(1.0f, 0.85f, 0.35f, 1.00f);            // Dorado para el texto
+  colors[ImGuiCol_WindowBg] = ImVec4(0.05f, 0.05f, 0.05f, 1.00f);       // Fondo negro
+  colors[ImGuiCol_Button] = ImVec4(0.15f, 0.15f, 0.15f, 1.00f);         // Botones negros opacos
+  colors[ImGuiCol_ButtonHovered] = ImVec4(1.0f, 0.85f, 0.35f, 1.00f);   // Hover con dorado brillante
+  colors[ImGuiCol_ButtonActive] = ImVec4(0.85f, 0.65f, 0.25f, 1.00f);   // Botones activos con dorado más tenue
 
-  colors[ImGuiCol_Border] = ImVec4(0.20f, 0.10f, 0.05f, 1.00f);          // Bordes (marrón muy oscuro)
-  colors[ImGuiCol_CheckMark] = ImVec4(0.70f, 0.35f, 0.20f, 1.00f);       // Checkmark (marrón rojizo)
-  colors[ImGuiCol_SliderGrab] = ImVec4(0.50f, 0.25f, 0.15f, 1.00f);      // Slider (marrón oscuro)
-  colors[ImGuiCol_SliderGrabActive] = ImVec4(0.60f, 0.35f, 0.20f, 1.00f);// Slider activo (marrón menos oscuro)
-  colors[ImGuiCol_Separator] = ImVec4(0.30f, 0.15f, 0.10f, 1.00f);       // Separadores (marrón muy oscuro)
+  colors[ImGuiCol_FrameBg] = ImVec4(0.10f, 0.10f, 0.10f, 1.00f);        // Fondo del frame negro opaco
+  colors[ImGuiCol_FrameBgHovered] = ImVec4(0.25f, 0.25f, 0.25f, 1.00f); // Fondo del frame al pasar el mouse gris oscuro
+  colors[ImGuiCol_TitleBg] = ImVec4(0.08f, 0.08f, 0.08f, 1.00f);        // Fondo del título negro
+  colors[ImGuiCol_TitleBgActive] = ImVec4(1.0f, 0.85f, 0.35f, 1.00f);   // Fondo del título activo dorado
 
-  colors[ImGuiCol_Tab] = ImVec4(0.35f, 0.20f, 0.10f, 1.00f);             // Pestañas (marrón muy oscuro)
-  colors[ImGuiCol_TabHovered] = ImVec4(0.50f, 0.30f, 0.20f, 1.00f);      // Pestañas al pasar el mouse (marrón menos oscuro)
-  colors[ImGuiCol_TabActive] = ImVec4(0.55f, 0.30f, 0.20f, 1.00f);       // Pestañas activas (marrón oscuro)
-  colors[ImGuiCol_Header] = ImVec4(0.30f, 0.15f, 0.10f, 1.00f);          // Encabezado (marrón oscuro)
-  colors[ImGuiCol_HeaderHovered] = ImVec4(0.40f, 0.25f, 0.15f, 1.00f);   // Encabezado al pasar el mouse (más claro)
-  colors[ImGuiCol_HeaderActive] = ImVec4(0.50f, 0.30f, 0.20f, 1.00f);    // Encabezado activo (marrón cálido)
+  colors[ImGuiCol_Border] = ImVec4(0.85f, 0.65f, 0.25f, 1.00f);         // Bordes dorados
+  colors[ImGuiCol_CheckMark] = ImVec4(1.0f, 0.85f, 0.35f, 1.00f);       // Checkmark dorado
+  colors[ImGuiCol_SliderGrab] = ImVec4(0.85f, 0.65f, 0.25f, 1.00f);     // Slider dorado
+  colors[ImGuiCol_SliderGrabActive] = ImVec4(1.0f, 0.85f, 0.35f, 1.00f);// Slider activo con dorado brillante
+  colors[ImGuiCol_Separator] = ImVec4(0.85f, 0.65f, 0.25f, 1.00f);      // Separadores dorados
 
-  colors[ImGuiCol_PopupBg] = ImVec4(0.20f, 0.15f, 0.10f, 1.00f);         // Fondo de pop-ups (marrón oscuro)
+  colors[ImGuiCol_Tab] = ImVec4(0.15f, 0.15f, 0.15f, 1.00f);            // Pestañas negras opacas
+  colors[ImGuiCol_TabHovered] = ImVec4(1.0f, 0.85f, 0.35f, 1.00f);      // Hover dorado
+  colors[ImGuiCol_TabActive] = ImVec4(0.85f, 0.65f, 0.25f, 1.00f);      // Pestañas activas doradas
+  colors[ImGuiCol_Header] = ImVec4(0.15f, 0.15f, 0.15f, 1.00f);         // Encabezados negros opacos
+  colors[ImGuiCol_HeaderHovered] = ImVec4(1.0f, 0.85f, 0.35f, 1.00f);   // Encabezados al pasar el mouse dorados
+  colors[ImGuiCol_HeaderActive] = ImVec4(0.85f, 0.65f, 0.25f, 1.00f);   // Encabezados activos dorados
+
+  colors[ImGuiCol_PopupBg] = ImVec4(0.08f, 0.08f, 0.08f, 1.00f);        // Fondo de pop-ups negros
 
   // Ajustes de estilo general
-  style.WindowRounding = 5.0f;   // Redondeo de bordes de ventanas
-  style.FrameRounding = 5.0f;   // Redondeo de bordes de cuadros
-  style.ScrollbarRounding = 5.0f;   // Redondeo de bordes de scrollbar
-  style.GrabRounding = 5.0f;   // Redondeo de bordes de botones de agarrar
-  style.FrameBorderSize = 1.0f;   // Grosor del borde de cuadros
-  style.WindowBorderSize = 1.0f;   // Grosor del borde de ventanas
-  style.PopupBorderSize = 1.0f;   // Grosor del borde de popups
+  style.WindowRounding = 10.0f;   // Redondeo más pronunciado
+  style.FrameRounding = 10.0f;    // Redondeo de los frames
+  style.ScrollbarRounding = 10.0f;// Redondeo de los scrollbars
+  style.GrabRounding = 10.0f;     // Redondeo de los sliders y botones de agarre
+  style.FrameBorderSize = 2.0f;   // Bordes más prominentes en los cuadros
+  style.WindowBorderSize = 2.0f;  // Grosor del borde de ventanas
+  style.PopupBorderSize = 2.0f;   // Grosor del borde de pop-ups
 }

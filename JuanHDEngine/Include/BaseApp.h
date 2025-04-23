@@ -125,9 +125,22 @@ public:
 
 
   // Wattson Actor
-  ModelLoader													g_Wattson;
+  ModelLoader													g_modelLoader;
   EngineUtilities::TSharedPointer<Actor> AWattson;
   std::vector<Texture>								g_WattsonTXT;
+
+  //SimpleGirl obj
+  ModelLoader													g_modelLoader1;
+  EngineUtilities::TSharedPointer<Actor> AMichi;
+  std::vector<Texture>								g_MichiTXT;
+
+  //SimpleGirl obj
+  ModelLoader													g_modelLoader2;
+  EngineUtilities::TSharedPointer<Actor> AWebi;
+  std::vector<Texture>								g_WebiTXT;
+
+
+
   Texture m_default;
 
   // Actors

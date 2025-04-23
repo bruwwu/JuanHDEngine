@@ -94,22 +94,25 @@ BaseApp::init() {
 	g_View = XMMatrixLookAtLH(Eye, At, Up);
 
   g_ui.init(g_window.m_hWnd, g_device.m_device, g_deviceContext.m_deviceContext);
+
+
 	// Set Wattson Actor
 	AWattson = EngineUtilities::MakeShared<Actor>(g_device);
 	if (!AWattson.isNull()) {
 		// Init Actor Transform
-		AWattson->getComponent<Transform>()->setTransform(EngineUtilities::Vector3(-0.9f, -2.0f, 2.0f),
-			EngineUtilities::Vector3(XM_PI / -2.0f, 0.0f, XM_PI / 2.0f),
+		AWattson->getComponent<Transform>()->setTransform(
+			EngineUtilities::Vector3(0.0f, 0.0f, 0.0f),
+			EngineUtilities::Vector3(0.0f, 3.0f, 0.0f),
 			EngineUtilities::Vector3(0.03f, 0.03f, 0.03f));
 
 		// Load Model
-		g_Wattson.LoadFBXModel("models/Wattson.fbx");
+		g_modelLoader.LoadFBXModel("models/Wattson.fbx");
 
 		// Init Actor Mesh
-		AWattson->setMesh(g_device, g_Wattson.meshes);
+		AWattson->setMesh(g_device, g_modelLoader.meshes);
 
 		// Set Actor Name
-		AWattson->setName(g_Wattson.modelName);
+		AWattson->setName(g_modelLoader.modelName);
 
 
 		std::vector<Texture> wattsonTextures;
@@ -142,6 +145,12 @@ BaseApp::init() {
 		g_WattsonTXT.push_back(Wattson_Hair);
     // Set Actor Textures
     AWattson->setTextures(g_WattsonTXT);
+	
+		g_actors.clear();
+
+		if (!AWattson.isNull()) {
+			g_actors.push_back(AWattson);
+		}
 		std::string msg = AWattson->getName() + " - Actor accessed successfully.";
 		MESSAGE("Actor", "Actor", msg.c_str());
 	}
@@ -149,8 +158,78 @@ BaseApp::init() {
 		MESSAGE("Actor", "Actor", "Actor resource not found.");
 	}
 
+
+
+	
+  AMichi = EngineUtilities::MakeShared<Actor>(g_device);
+	if (!AMichi.isNull()) {
+		AMichi->getComponent<Transform>()->setTransform(
+			{ 0.0, 0.0f, 4.0f },      // Posición
+			{ XM_PI / 1.0f, 0.0f, XM_PI }, // Rotación (en radianes)
+			{ 0.05f, 0.05f, 0.05f }      // Escala (muy pequeña)
+		);
+
+		g_modelLoader1.LoadOBJ_model("models/Simple.obj");
+		// Se asignan las mallas procesadas desde el .OBJ al actor
+		AMichi->setMesh(g_device, g_modelLoader1.meshes);
+    
+    AMichi->setName(g_modelLoader1.modelName);
+		// Se asignan las texturas a cada submesh del actor
+	
+		
+
+		std::vector<Texture> MichiTXT;
+
+		Texture head;
+		head.init(g_device, "Textures/head.png", ExtensionType::PNG);
+
+		Texture q;
+		q.init(g_device, "Textures/head.png", ExtensionType::PNG);
+
+		Texture w;
+		w.init(g_device, "Textures/head.png", ExtensionType::PNG);
+
+		Texture e;
+		e.init(g_device, "Textures/head.png", ExtensionType::PNG);
+		
+
+		Texture body;
+		body.init(g_device, "Textures/body.png", ExtensionType::PNG);
+
+		Texture a;
+		a.init(g_device, "Textures/body.png", ExtensionType::PNG);
+
+		Texture s;
+		s.init(g_device, "Textures/body.png", ExtensionType::PNG);
+
+		Texture all;
+		all.init(g_device, "Textures/all.png", ExtensionType::PNG);
+
+
+		
+
+    MichiTXT.push_back(head);
+    MichiTXT.push_back(q);
+    MichiTXT.push_back(w);
+    MichiTXT.push_back(e);
+    MichiTXT.push_back(body);
+    MichiTXT.push_back(a);
+    MichiTXT.push_back(s);
+    MichiTXT.push_back(all);
+
+		AMichi->setTextures(MichiTXT);
+		
+		if (!AMichi.isNull()) {
+			g_actors.push_back(AMichi);
+		}
+		MESSAGE("Actor", "AMichi", (AMichi->getName() + " - Actor accessed successfully.").c_str());
+	}
+	else {
+		ERROR("Actor", "AMichi", "Failed to create actor.");
+	}
 	return S_OK;
 }
+	
 
 
 
@@ -171,7 +250,6 @@ BaseApp::update() {
 	}
 	// Renderizar UI
 	g_ui.Inspector();
-	g_ui.renderWindow();
 	updateTransalationbyKeys(t);
 
 	// Actualizar la matriz de proyecci�n
@@ -185,7 +263,8 @@ BaseApp::update() {
 
 	// Actualizar info logica del mesh
 	AWattson->update(0, g_deviceContext);
-
+	
+  AMichi->update(0, g_deviceContext);
 }
 
 void
@@ -279,6 +358,7 @@ BaseApp::render() {
 
 	// Render the models
 	AWattson->render(g_deviceContext);
+  AMichi->render(g_deviceContext);
 	//Awebitos->render(m_deviceContext);
 
 	// Set Constant Buffers and asign Shaders
@@ -298,7 +378,8 @@ BaseApp::render() {
 void
 BaseApp::destroy() {
 	if (g_deviceContext.m_deviceContext) g_deviceContext.m_deviceContext->ClearState();
-  AWattson->destroy();
+  //AWattson->destroy();
+  //AMichi->destroy();	
 
 	//g_textureRV.destroy();
 	g_neverChanges.destroy();

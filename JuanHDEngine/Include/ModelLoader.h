@@ -24,6 +24,10 @@ public:
 	void
 		ProcessFBXMaterials(FbxSurfaceMaterial* material);
 
+	// Carga modelo OBJ en m_meshes directamente
+	bool 
+		LoadOBJ_model(const std::string& filePath);
+
 	std::vector<std::string>
 		GetTextureFileNames() const { return textureFileNames; }
 
