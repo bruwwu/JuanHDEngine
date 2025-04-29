@@ -1,49 +1,59 @@
 #pragma once
+
 class DeviceContext;
 
-/*
-* @class Component
-* @brief Clase base abstracta para todos los componentes del juego.
-* La clase Component define la interfaz básica que todos los componentes deben implementar,
-* permitiendo actualizar y renderizar el componente, asi como obtener su tipo.
-*/
-class
-  Component {
+/**
+ * @class Component
+ * @brief Clase base abstracta para todos los componentes del motor de juego.
+ *
+ * Define la interfaz básica que todos los componentes deben implementar,
+ * permitiendo su actualización y renderizado. También maneja la identificación
+ * de cada componente mediante un tipo específico.
+ */
+class Component {
 public:
+  /**
+   * @brief Constructor por defecto de Component.
+   */
   Component() = default;
 
   /**
-  * @brief Constructor with component type.
-  * @param type Type of the component.
-  */
+   * @brief Constructor que inicializa el tipo de componente.
+   * @param type Tipo del componente definido en la enumeración ComponentType.
+   */
   Component(const ComponentType type) : m_type(type) {}
 
-  virtual
-    ~Component() = default;
+  /**
+   * @brief Destructor virtual de Component.
+   *
+   * Permite la destrucción adecuada de objetos derivados.
+   */
+  virtual ~Component() = default;
 
-  /*
-  * @brief Pure virtual method to update the component.
-  * @param deltaTime Time elapsed since the last update.
-  */
-  virtual void
-    update(float deltaTime) = 0;
+  /**
+   * @brief Actualiza la lógica del componente.
+   *
+   * Método virtual puro que debe ser implementado por las clases hijas.
+   *
+   * @param deltaTime Tiempo transcurrido desde la última actualización.
+   */
+  virtual void update(float deltaTime) = 0;
 
-  /*
-  * @brief Pure virtual method to render the component.
-  * @param deviceContext The device context for graphic operations.
-  */
-  virtual void
-    render(DeviceContext& deviceContext) = 0;
+  /**
+   * @brief Renderiza el componente.
+   *
+   * Método virtual puro que debe ser implementado por las clases hijas.
+   *
+   * @param deviceContext Contexto del dispositivo para renderizar operaciones gráficas.
+   */
+  virtual void render(DeviceContext& deviceContext) = 0;
 
-  /*
-  * @brief Gets the component type.
-  * @return The type of the component.
-  */
-  ComponentType
-    getType()
-    const {
-    return m_type;
-  }
+  /**
+   * @brief Obtiene el tipo del componente.
+   * @return Tipo del componente (`ComponentType`).
+   */
+  ComponentType getType() const { return m_type; }
+
 protected:
-  ComponentType m_type; //Tipo de componente
+  ComponentType m_type; ///< Tipo del componente, definido en la enumeración ComponentType.
 };
